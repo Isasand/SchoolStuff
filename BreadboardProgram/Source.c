@@ -6,7 +6,6 @@ typedef int bool;
 #define STD_PIN_DISTANCE 2.54
 
 int main() {
-	FILE *fptr;
 	int menuChoice;
 
 	menuChoice = Menu();
@@ -20,38 +19,53 @@ int main() {
 		newBreadboard.m_Connections = CalculateConnections(&newBreadboard.m_Lenght, &newBreadboard.m_Width, STD_PIN_DISTANCE);
 		printf("\nNew breadboard created with the following properties");
 		PrintInfoBreadboard(newBreadboard);
-		int choice = ComponentsMenu();
 
-		switch (choice) {
-		case 1: { //new sensor
-			Sensor newSensor;
-			FillNewSensor(&newSensor);
-			PrintInfoSensor(newSensor);
-			break;
-		}
-		case 2: { //new LED
-
-			break;
-		}
-		case 3: {//new LCD
-
-			break;
-		}
-		case 4: {//use existing
-			Breadboard hcBreadboard;
-			Sensor hcSensor1, hcSensor2, hcSensor3;
-			LED hcLED1, hcLED2, hcLED3;
-
-			break;
-		}
-
-		}
 		break;//breake case 1 in switch(choice)
 	}
 	case 2: { //use existing breadboard
+		Breadboard hcBreadboard;
+		HardCodeBreadboard(&hcBreadboard);
+		PrintInfoBreadboard(hcBreadboard);
 		break;
 	}
 	case 3: { //exit program
+		break;
+	}
+
+
+	}
+
+	int choice = ComponentsMenu();
+
+	switch (choice) {
+	case 1: { //new sensor
+		Sensor newSensor;
+		FillNewSensor(&newSensor);
+		PrintInfoSensor(newSensor);
+		break;
+	}
+	case 2: { //new LED
+
+		break;
+	}
+	case 3: {//new LCD
+
+		break;
+	}
+	case 4: {//use existing
+		/*Sensor hcS1, hcS2, hcS3;
+		LED hcLED1, hcLED2, hcLED3;
+		int moduleChoice;
+
+		HardCodeModules(hcS1, hcS2, hcS3, hcLED1, hcLED2, hcLED3);
+
+		moduleChoice = ChooseModule();
+		switch (moduleChoice) {
+		case 1: {
+
+		}
+
+		}*/
 		break;
 	}
 
