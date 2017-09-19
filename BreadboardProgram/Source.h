@@ -42,6 +42,16 @@ void PrintInfoBreadboard(Breadboard b) {
 	printf("Operating voltage: %.1fV\n", b.m_OperatingVoltage);
 }
 
+//såhär får en ett rimligt avstånd på connections på breadboarden
+int CalculateConnections(float *lenght, float *width, float pinDistance) {
+	int connections;
+	float availableSpace;
+	//available space for connections use to be like a bit less that 2/3
+	availableSpace = (((*lenght) * (*width))* 0.60);
+	//pow är en funktion för upphöjt till från math.h
+	return connections = (availableSpace / (pinDistance = pow(pinDistance, 2)));
+}
+
 int ComponentsMenu() {
 	int choice;
 	printf("\nAdd type of component for attatchment to breadboard\n");
@@ -90,16 +100,24 @@ void AddNewLed() {
 	printf("Min operating voltage: ");
 }
 
+void HardCodeModules(Breadboard *a, Sensor *b, Sensor *c, Sensor *d, LED *e, LED *f, LED *g ) {
+	a->m_Lenght = 165; a->m_Width = 55; a->m_Connections = 830; a->m_OperatingVoltage = 5;
+	
+	strcpy(b->m_SensorType, "Soil Moisture Sensor"); 
+	strcpy(b->m_Model, "LM393");
+	b->m_NumberOfPins = 4; b->m_MaxOperatingVoltage = 5; b->m_MinOperatingVoltage = 3.3;
 
+	strcpy(c->m_SensorType, "Ultrasonic Sensor");
+	strcpy(c->m_Model, "HC-SR04");
+	c->m_NumberOfPins = 4; c->m_MaxOperatingVoltage = 5; c->m_MinOperatingVoltage = 5;
 
-//såhär får en ett rimligt avstånd på connections på breadboarden
-int CalculateConnections(float *lenght, float *width, float pinDistance) {
-	int connections;
-	float availableSpace;
-	//available space for connections use to be like a bit less that 2/3
-	availableSpace = (((*lenght) * (*width))* 0.60);
-	//pow är en funktion för upphöjt till från math.h
-	return connections = (availableSpace / (pinDistance = pow(pinDistance, 2)));
+	strcpy(d->m_SensorType, "Temperature/ Humidity Sensor");
+	strcpy(d->m_Model, "DHT11");
+	d->m_NumberOfPins = 3; d->m_MaxOperatingVoltage = 5; d->m_MinOperatingVoltage = 5;
+
+	strcpy(e->m_Color, "Red"); e->m_MaxOperatingVoltage = 2.2; e->m_MinOperatingVoltage = 1.8;
+	strcpy(f->m_Color, "Green"); f->m_MaxOperatingVoltage = 2.2; f->m_MinOperatingVoltage = 1.8;
+	strcpy(g->m_Color, "Green"); g->m_MaxOperatingVoltage = 2.2; g->m_MinOperatingVoltage = 1.8;
 }
 
 /*int Calc_RowOfAvailableConnections(Breadboard *b, float pinDistance) {

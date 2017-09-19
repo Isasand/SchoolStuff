@@ -23,42 +23,24 @@ int main() {
 		int choice = ComponentsMenu();
 
 		switch (choice) {
-		case 1: { //sensor
+		case 1: { //new sensor
 			Sensor newSensor;
 			FillNewSensor(&newSensor);
 			PrintInfoSensor(newSensor);
 			break;
 		}
-		case 2: { //LED
+		case 2: { //new LED
 
 			break;
 		}
-		case 3: {//LCD
+		case 3: {//new LCD
 
 			break;
 		}
 		case 4: {//use existing
-			char c;
-
-			fopen_s(&fptr, "Modules.txt", "r");
-
-			CheckFileStatus(fptr);
-			printf("Hello");
-
-			if (fptr) {
-				c = fgetc(fptr);
-
-				while (c != EOF) {
-					if c
-				}
-			}
-			fclose(fptr);
-
-			for (int i = 0; i < 100; i++) {
-				for (int j = 0; j < 100; i++) {
-					printf("%s", modulesList[i][j]);
-				}
-			}
+			Breadboard hcBreadboard;
+			Sensor hcSensor1, hcSensor2, hcSensor3;
+			LED hcLED1, hcLED2, hcLED3;
 
 			break;
 		}

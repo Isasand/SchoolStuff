@@ -8,7 +8,7 @@ typedef struct {
 } Breadboard;
 
 typedef struct {
-	char m_SensorType[20];
+	char m_SensorType[50];
 	char m_Model[20];
 	int m_NumberOfPins;
 	float m_MaxOperatingVoltage;
