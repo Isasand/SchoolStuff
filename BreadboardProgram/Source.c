@@ -1,15 +1,9 @@
 #include "Source.h"
 #define STD_PIN_DISTANCE 2.54 
-/*
-typedef struct {
-	Breadboard m_Breadboard;
-	Sensor m_Sensors[20];
-	LED m_LEDs[20];
-	bool useOfPotentiometer;
-} Template;*/
 
 int main() {
-	Template myBreadboardwComponents;
+	MyTemplate myBreadboardwComponents = { NULL, NULL, NULL, false };
+	int usedPins = 0;
 
 	int menuChoice;
 	menuChoice = Menu();
@@ -23,14 +17,14 @@ int main() {
 		newBreadboard.m_Connections = CalcConnections(&newBreadboard.m_Pins_X, &newBreadboard.m_Pins_Y, STD_PIN_DISTANCE);
 		printf("\nNew breadboard created with the following properties");
 		PrintInfoBreadboard(newBreadboard);
-
+		myBreadboardwComponents.m_Breadboard = newBreadboard;
 		break;
 	}
 	case 2: { //use existing breadboard
 		Breadboard hcBreadboard;
 		HardCodeBreadboard(&hcBreadboard);
 		PrintInfoBreadboard(hcBreadboard);
-
+		myBreadboardwComponents.m_Breadboard = hcBreadboard;
 		break;
 	}
 	case 3: { //exit program
@@ -45,7 +39,7 @@ int main() {
 		Sensor newSensor;
 		FillNewSensor(&newSensor);
 		PrintInfoSensor(newSensor);
-
+		myBreadboardwComponents.m_Sensors[0] = newSensor;
 		break;
 	}
 	case 2: {//new LED
@@ -53,6 +47,8 @@ int main() {
 		FillNewLED(&newLED);
 		printf("\nNew LED created with the following properties");
 		PrintInfoLED(newLED);
+		myBreadboardwComponents.m_LEDs[0] = newLED;
+		usedPins=+2;
 		break;
 	}
 	case 3: {//use existing
@@ -62,10 +58,46 @@ int main() {
 
 		HardCodeModules(&hcS1, &hcS2, &hcS3, &hcLED1, &hcLED2, &hcLED3);
 
+		moduleChoice = ChooseModule();
+		switch (moduleChoice) {
+		case 1: {
+			myBreadboardwComponents.m_Sensors[0] = hcS1;
+			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			break;
+		}
+		case 2: {
+			myBreadboardwComponents.m_Sensors[0] = hcS2;
+			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			break;
+		}
+		case 3: {
+			myBreadboardwComponents.m_Sensors[0] = hcS3;
+			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			break;
+		}
+		case 4: {
+			myBreadboardwComponents.m_LEDs[0] = hcLED1;
+			usedPins = +2;
+			break;
+		}
+		case 5: {
+			myBreadboardwComponents.m_LEDs[0] = hcLED2;
+			usedPins = +2;
+			break;
+		}
+		case 6: {
+			myBreadboardwComponents.m_LEDs[0] = hcLED3;
+			usedPins = +2;
+			break;
+		}
+		}
+		
 		break;
 	}
-
 	}
+
+	getchar();
+	PrintInfoMyTemplate(myBreadboardwComponents);
 	getchar();
 
 	return 0;

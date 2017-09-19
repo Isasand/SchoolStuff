@@ -129,9 +129,9 @@ void HardCodeBreadboard(Breadboard *a) {
 	a->m_Pins_X = 120; a->m_Pins_Y = 42; a->m_Connections = 781; a->m_OperatingVoltage = 5;
 }
 
-void HardCodeModules(Sensor *b, Sensor *c, Sensor *d, LED *e, LED *f, LED *g ) {
-	
-	strcpy(b->m_SensorType, "Soil Moisture Sensor"); 
+void HardCodeModules(Sensor *b, Sensor *c, Sensor *d, LED *e, LED *f, LED *g) {
+
+	strcpy(b->m_SensorType, "Soil Moisture Sensor");
 	strcpy(b->m_Model, "LM393");
 	b->m_NumberOfPins = 4; b->m_MaxOperatingVoltage = 5; b->m_MinOperatingVoltage = 3.3;
 
@@ -155,7 +155,45 @@ int ChooseModule() {
 	printf("\nUltrasonic Sensor (2)");
 	printf("\nTemperature/ Humidity Sensor (3)");
 	printf("LED Red (4), Green (5), Blue (6)");
-
+	scanf_s("%d", &choice);
 	return choice;
 }
 
+void PrintInfoMyTemplate(MyTemplate myTemplate) {
+	int i, j;
+	
+
+	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate.m_Breadboard.m_Connections, myTemplate.m_Breadboard.m_OperatingVoltage);
+	printf("Sensors:\n");
+	for (i = 0; i < 20; i++) {
+		if ((myTemplate.m_Sensors[i].m_SensorType) != NULL) {
+			printf("%s", myTemplate.m_Sensors[i].m_SensorType);
+		}
+		else {
+			i = 20;
+		}
+	}
+
+	printf("\nLEDS:\n");
+	for (j = 0; j < 20; j++) {
+		printf("%s", myTemplate.m_LEDs[j].m_Color);
+		if ((myTemplate.m_LEDs[j].m_MaxOperatingVoltage) != 0.0) {
+			printf("(%.1fV max)", myTemplate.m_LEDs[j].m_MaxOperatingVoltage);
+		}
+	}
+
+
+	if (myTemplate.useOfPotentiometer = true) {
+		printf("\nSince some of your components need volt regulation, we added a potentiometer (occupies 3 pins)");
+	}
+
+}
+
+/*void FillEmptySpots(MyTemplate myTemplate) {//TODO lite ful lösning, allokeringen ska nog ske smidigare eller jämförelsen för att hitta tom plats
+	for (int i = 0; i < 20; i++) {
+		strcpy(myTemplate.m_Sensors[i].m_SensorType, "NULL");
+	}
+	for (int j = 0; j < 20; j++) {
+		strcpy(myTemplate.m_LEDs[j].m_Color, "NULL");
+	}
+}*/

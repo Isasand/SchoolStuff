@@ -33,4 +33,4 @@ typedef struct {
 	Sensor m_Sensors[20];
 	LED m_LEDs[20];
 	bool useOfPotentiometer;
-} Template;
+} MyTemplate;
