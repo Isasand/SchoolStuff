@@ -1,71 +1,67 @@
 #include "Source.h"
-typedef int bool;
-#define true 1
-#define false 0
-
-#define STD_PIN_DISTANCE 2.54
+#define STD_PIN_DISTANCE 2.54 
+/*
+typedef struct {
+	Breadboard m_Breadboard;
+	Sensor m_Sensors[20];
+	LED m_LEDs[20];
+	bool useOfPotentiometer;
+} Template;*/
 
 int main() {
-	int menuChoice;
+	Template myBreadboardwComponents;
 
+	int menuChoice;
 	menuChoice = Menu();
 	getchar();
 
-	switch (menuChoice) {
+	switch (menuChoice) { //new breadboard, use existing breadboard, exit program
 
 	case 1: { // new breadboard
 		Breadboard newBreadboard;
 		FillNewBreadboard(&newBreadboard);
-		newBreadboard.m_Connections = CalculateConnections(&newBreadboard.m_Lenght, &newBreadboard.m_Width, STD_PIN_DISTANCE);
+		newBreadboard.m_Connections = CalcConnections(&newBreadboard.m_Pins_X, &newBreadboard.m_Pins_Y, STD_PIN_DISTANCE);
 		printf("\nNew breadboard created with the following properties");
 		PrintInfoBreadboard(newBreadboard);
 
-		break;//breake case 1 in switch(choice)
+		break;
 	}
 	case 2: { //use existing breadboard
 		Breadboard hcBreadboard;
 		HardCodeBreadboard(&hcBreadboard);
 		PrintInfoBreadboard(hcBreadboard);
+
 		break;
 	}
 	case 3: { //exit program
 		break;
 	}
-
-
 	}
 
-	int choice = ComponentsMenu();
-
+	int choice = ComponentsMenu(); //new sensor, new LED, use existing
 	switch (choice) {
+
 	case 1: { //new sensor
 		Sensor newSensor;
 		FillNewSensor(&newSensor);
 		PrintInfoSensor(newSensor);
-		break;
-	}
-	case 2: { //new LED
 
 		break;
 	}
-	case 3: {//new LCD
-
+	case 2: {//new LED
+		LED newLED;
+		FillNewLED(&newLED);
+		printf("\nNew LED created with the following properties");
+		PrintInfoLED(newLED);
 		break;
 	}
-	case 4: {//use existing
-		/*Sensor hcS1, hcS2, hcS3;
+	case 3: {//use existing
+		Sensor hcS1, hcS2, hcS3;
 		LED hcLED1, hcLED2, hcLED3;
 		int moduleChoice;
 
-		HardCodeModules(hcS1, hcS2, hcS3, hcLED1, hcLED2, hcLED3);
+		HardCodeModules(&hcS1, &hcS2, &hcS3, &hcLED1, &hcLED2, &hcLED3);
 
-		moduleChoice = ChooseModule();
-		switch (moduleChoice) {
-		case 1: {
-
-		}
-
-		}*/
 		break;
 	}
 
