@@ -48,16 +48,6 @@ void PrintInfoBreadboard(Breadboard b) {
 	printf("Operating voltage: %.1fV\n", b.m_OperatingVoltage);
 }
 
-//såhär får en ett rimligt avstånd på connections på breadboarden 
-/*int CalculateConnections(float *lenght, float *width, float pinDistance) {
-	int connections;
-	float availableSpace;
-	//available space for connections use to be like a bit less that 2/3
-	availableSpace = (((*lenght) * (*width))* 0.60);
-	//pow är en funktion för upphöjt till från math.h
-	return connections = (availableSpace / (pinDistance = pow(pinDistance, 2)));
-}*/
-
 int ComponentsMenu() {
 	int choice;
 	printf("\nAdd type of component for attatchment to breadboard\n");
@@ -182,18 +172,27 @@ void PrintInfoMyTemplate(MyTemplate myTemplate) {
 		}
 	}
 
-
-	if (myTemplate.useOfPotentiometer = true) {
-		printf("\nSince some of your components need volt regulation, we added a potentiometer (occupies 3 pins)");
-	}
-
 }
 
-/*void FillEmptySpots(MyTemplate myTemplate) {//TODO lite ful lösning, allokeringen ska nog ske smidigare eller jämförelsen för att hitta tom plats
-	for (int i = 0; i < 20; i++) {
-		strcpy(myTemplate.m_Sensors[i].m_SensorType, "NULL");
+int CheckMaxVoltage(MyTemplate myTemplate, int *usedPins) {
+	//om volten till breadboaren är större är maxvoltage hos sensorn så lägger vi till en potentiometer
+	if (myTemplate.m_Breadboard.m_OperatingVoltage > myTemplate.m_Sensors[0].m_MaxOperatingVoltage) {
+		printf("\n**Since this module needs voltage regulation we added a potentiometer (uses 3 connection pins)**\n");
+		*usedPins = +3;
+		return 1;
 	}
-	for (int j = 0; j < 20; j++) {
-		strcpy(myTemplate.m_LEDs[j].m_Color, "NULL");
+	else {
+		return 0;
+	}
+}
+
+/*int PinsError(Breadboard *b, int usedPins) {
+	float approxUniquePins = ((b->m_Pins_X) * 2);
+	approxUniquePins = approxUniquePins * 0.6; //vi måste räkna marginal för att en placerar ut grejerna + pinsen ligger inte bredvid varandra
+	if (usedPins > approxUniquePins) {
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }*/

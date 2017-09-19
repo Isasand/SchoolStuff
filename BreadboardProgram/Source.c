@@ -63,31 +63,34 @@ int main() {
 		case 1: {
 			myBreadboardwComponents.m_Sensors[0] = hcS1;
 			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
 			break;
 		}
 		case 2: {
 			myBreadboardwComponents.m_Sensors[0] = hcS2;
 			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
 			break;
 		}
 		case 3: {
 			myBreadboardwComponents.m_Sensors[0] = hcS3;
 			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
+			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
 			break;
 		}
 		case 4: {
 			myBreadboardwComponents.m_LEDs[0] = hcLED1;
-			usedPins = +2;
+			usedPins = +4; //två för led, två för resistorn 
 			break;
 		}
 		case 5: {
 			myBreadboardwComponents.m_LEDs[0] = hcLED2;
-			usedPins = +2;
+			usedPins = +4;
 			break;
 		}
 		case 6: {
 			myBreadboardwComponents.m_LEDs[0] = hcLED3;
-			usedPins = +2;
+			usedPins = +4;
 			break;
 		}
 		}
@@ -97,7 +100,9 @@ int main() {
 	}
 
 	getchar();
+	//int check = PinsError(&myBreadboardwComponents.m_Breadboard, usedPins);
 	PrintInfoMyTemplate(myBreadboardwComponents);
+	
 	getchar();
 
 	return 0;
