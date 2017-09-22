@@ -10,6 +10,7 @@ typedef struct {
 	int m_Pins_Y;
 	int m_Connections;
 	float m_OperatingVoltage;
+	float m_Ampere;
 } Breadboard;
 
 typedef struct {

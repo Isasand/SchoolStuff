@@ -3,7 +3,8 @@
 
 
 int main() {
-	MyTemplate myBreadboardwComponents = { NULL, NULL, NULL, false };
+	MyTemplate *myBreadboardwComponents = malloc(sizeof(MyTemplate));
+	
 	int usedPins = 0;
 
 	int menuChoice;
@@ -18,14 +19,14 @@ int main() {
 		newBreadboard.m_Connections = CalcConnections(&newBreadboard.m_Pins_X, &newBreadboard.m_Pins_Y);
 		printf("\nNew breadboard created with the following properties");
 		PrintInfoBreadboard(newBreadboard);
-		myBreadboardwComponents.m_Breadboard = newBreadboard;
+		myBreadboardwComponents->m_Breadboard = newBreadboard;
 		break;
 	}
 	case 2: { //use existing breadboard
 		Breadboard hcBreadboard;
 		HardCodeBreadboard(&hcBreadboard);
 		PrintInfoBreadboard(hcBreadboard);
-		myBreadboardwComponents.m_Breadboard = hcBreadboard;
+		myBreadboardwComponents->m_Breadboard = hcBreadboard;
 		break;
 	}
 	case 3: { //exit program
@@ -45,8 +46,8 @@ int main() {
 
 			FillNewSensor(&newSensor);
 			PrintInfoSensor(newSensor);
-			myBreadboardwComponents.m_Sensors[sensorCount] = newSensor;
-			usedPins = usedPins + myBreadboardwComponents.m_Sensors[sensorCount].m_NumberOfPins;
+			myBreadboardwComponents->m_Sensors[sensorCount] = newSensor;
+			usedPins = usedPins + myBreadboardwComponents->m_Sensors[sensorCount].m_NumberOfPins;
 			sensorCount++;
 			getchar();
 			printf("Choose again (y/n)?");
@@ -59,14 +60,13 @@ int main() {
 			FillNewLED(&newLED);
 			printf("\nNew LED created with the following properties");
 			PrintInfoLED(newLED);
-			myBreadboardwComponents.m_LEDs[LEDCount] = newLED;
+			myBreadboardwComponents->m_LEDs[LEDCount] = newLED;
 			usedPins = usedPins + 4;
 			LEDCount++;
 
 			getchar();
 			printf("Choose again (y/n)?");
 			chooseAgain = getchar();
-
 			break;
 		}
 		case 3: {//use existing
@@ -79,14 +79,14 @@ int main() {
 			moduleChoice = ChooseModule();
 
 			if (moduleChoice < 3) {
-				myBreadboardwComponents.m_Sensors[sensorCount] = hcSensors[moduleChoice - 1];
-				usedPins = usedPins + myBreadboardwComponents.m_Sensors[sensorCount].m_NumberOfPins;
-				myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+				myBreadboardwComponents->m_Sensors[sensorCount] = hcSensors[moduleChoice - 1];
+				usedPins = usedPins + myBreadboardwComponents->m_Sensors[sensorCount].m_NumberOfPins;
+				myBreadboardwComponents->useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
 				sensorCount++;
 			}
 
 			else {
-				myBreadboardwComponents.m_LEDs[LEDCount] = hcLEDs[moduleChoice - 4];
+				myBreadboardwComponents->m_LEDs[LEDCount] = hcLEDs[moduleChoice - 4];
 				usedPins = usedPins + 2; //två för led, två för resistorn 
 				LEDCount++;
 			}

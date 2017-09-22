@@ -5,6 +5,14 @@
 #include <conio.h>
 #include <stdlib.h>
 
+
+void CalculateWatt(float *volt, float *ampere) {
+	float watt = 0;
+
+	return watt = (*volt) * (*ampere);
+}
+
+
 void CheckFileStatus(FILE *fptr) {
 	if (fptr == NULL) {
 		printf("Could not open file");
@@ -22,7 +30,7 @@ int Menu() {
 }
 
 void FillNewBreadboard(Breadboard *b) {
-	float lenght = 0, width = 0, opVoltage = 0;
+	float lenght = 0, width = 0, opVoltage = 0, ampere = 0;
 	int connections = 0;
 	printf("\nNumber of pins (vertical): ");
 	scanf_s("%f", &lenght);
@@ -33,6 +41,9 @@ void FillNewBreadboard(Breadboard *b) {
 	printf("Operating voltage: ");
 	scanf_s("%f", &opVoltage);
 	b->m_OperatingVoltage = opVoltage;
+	printf("Ampere: ");
+	scanf_s("%f", &ampere);
+	b->m_Ampere = ampere;
 	getchar();
 }
 
@@ -47,6 +58,7 @@ void PrintInfoBreadboard(Breadboard b) {
 	printf("Pins (Horizontal): %d \n", b.m_Pins_Y);
 	printf("Available pin connections: %d\n", b.m_Connections);
 	printf("Operating voltage: %.1fV\n", b.m_OperatingVoltage);
+	printf("Ampere: %2.f\n", b.m_Ampere);
 }
 
 int ComponentsMenu() {
@@ -117,7 +129,7 @@ void PrintInfoLED(LED led) {
 }
 
 void HardCodeBreadboard(Breadboard *a) {
-	a->m_Pins_X = 120; a->m_Pins_Y = 42; a->m_Connections = 781; a->m_OperatingVoltage = 5;
+	a->m_Pins_X = 120; a->m_Pins_Y = 42; a->m_Connections = 781; a->m_OperatingVoltage = 5;  a->m_Ampere = 0.5;
 }
 
 void HardCodeModules(Sensor *hcSensors, LED *leds) {
@@ -150,29 +162,26 @@ int ChooseModule() {
 	return choice;
 }
 
-void PrintInfoMyTemplate(MyTemplate myTemplate, int usedPins, int LEDCount, int sensorCount) {
+void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int sensorCount) {
 	int i, j;
 
 
-	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate.m_Breadboard.m_Connections, myTemplate.m_Breadboard.m_OperatingVoltage);
+	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
 	if (sensorCount != 0) {
 		printf("Sensors:\n");
-		for (i = 0; i < 20; i++) {
-			if ((myTemplate.m_Sensors[i].m_SensorType) != NULL) {
-				printf("%s", myTemplate.m_Sensors[i].m_SensorType);
-			}
-			else {
-				i = 20;
-			}
+		for (i = 0; i < sensorCount; i++) {
+			printf("%s", myTemplate->m_Sensors[i].m_SensorType);
+
+
 		}
 	}
 
 	if (LEDCount != 0) {
-		printf("\nLEDS:\n");
-		for (j = 0; j < 20; j++) {
-			printf("%s", myTemplate.m_LEDs[j].m_Color);
-			if ((myTemplate.m_LEDs[j].m_MaxOperatingVoltage) != 0.0) {
-				printf("(%.1fV max)\n", myTemplate.m_LEDs[j].m_MaxOperatingVoltage);
+		printf("\n\nLEDS:\n");
+		for (j = 0; j < LEDCount; j++) {
+			printf("%s", myTemplate->m_LEDs[j].m_Color);
+			if ((myTemplate->m_LEDs[j].m_MaxOperatingVoltage) != 0.0) {
+				printf("(%.1fV max)\n", myTemplate->m_LEDs[j].m_MaxOperatingVoltage);
 			}
 		}
 	}
@@ -180,9 +189,9 @@ void PrintInfoMyTemplate(MyTemplate myTemplate, int usedPins, int LEDCount, int 
 	printf("\nUsed pins: %d", usedPins);
 }
 
-int CheckMaxVoltage(MyTemplate myTemplate, int *usedPins) {
+int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins) {
 	//om volten till breadboaren är större är maxvoltage hos sensorn så lägger vi till en potentiometer
-	if (myTemplate.m_Breadboard.m_OperatingVoltage > myTemplate.m_Sensors[0].m_MaxOperatingVoltage) {
+	if (myTemplate->m_Breadboard.m_OperatingVoltage > myTemplate->m_Sensors[0].m_MaxOperatingVoltage) {
 		printf("\n**Since this module needs voltage regulation we added a potentiometer (uses 3 connection pins)**\n");
 		*usedPins = *usedPins + 3;
 		return 1;
