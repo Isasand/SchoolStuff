@@ -4,18 +4,10 @@
 #include <math.h> 
 #include <conio.h>
 #include <stdlib.h>
-
+#include <Windows.h>
 
 void CalculateWatt(float *volt, float *ampere, float *watt) {
 	(*watt) = (*volt) * (*ampere);
-}
-
-
-void CheckFileStatus(FILE *fptr) {
-	if (fptr == NULL) {
-		printf("Could not open file");
-	}
-
 }
 
 int Menu() {
@@ -30,7 +22,7 @@ int Menu() {
 void FillNewBreadboard(Breadboard *b) {
 	float lenght = 0, width = 0, opVoltage = 0, ampere = 0;
 	int connections = 0;
-	printf("\nNumber of pins (vertical): ");
+	printf("Number of pins (vertical): ");
 	scanf_s("%f", &lenght);
 	b->m_Pins_X = lenght;
 	printf("Number of pins (Horizontal): ");
@@ -52,16 +44,16 @@ int CalcConnections(int  *pinsX, int *pinsY) {
 }
 
 void PrintInfoBreadboard(Breadboard b) {
-	printf("\nPins (vertical): %d \n", b.m_Pins_X);
+	printf("Pins (vertical): %d \n", b.m_Pins_X);
 	printf("Pins (Horizontal): %d \n", b.m_Pins_Y);
 	printf("Available pin connections: %d\n", b.m_Connections);
 	printf("Operating voltage: %.1fV\n", b.m_OperatingVoltage);
-	printf("Ampere: %.1f\n", b.m_Ampere);
+	printf("Ampere: %.1f\n\n", b.m_Ampere);
 }
 
 int ComponentsMenu() {
 	int choice;
-	printf("\nAdd type of component for attatchment to breadboard\n");
+	printf("Add type of component for attatchment to breadboard\n");
 	printf("Sensor (1)\n");
 	printf("LED (2)\n");
 	printf("Use existing (3)\n");
@@ -95,7 +87,7 @@ void FillNewSensor(Sensor *s) {
 }
 
 void PrintInfoSensor(Sensor s) {
-	printf("\nSensor type: %s", s.m_SensorType);
+	printf("Sensor type: %s", s.m_SensorType);
 	printf("Model: %s", s.m_Model);
 	printf("Number of pins: %d\n", s.m_NumberOfPins);
 	printf("Max operating voltage: %.1fV\n", s.m_MaxOperatingVoltage);
@@ -121,7 +113,7 @@ void FillNewLED(LED *led) {
 }
 
 void PrintInfoLED(LED led) {
-	printf("\nColor: %s", led.m_Color);
+	printf("Color: %s", led.m_Color);
 	printf("Max operating voltage: %.1f", led.m_MaxOperatingVoltage);
 	printf("\nMin operating voltage: %.1f\n", led.m_MinOperatingVoltage);
 }
@@ -151,7 +143,7 @@ void HardCodeModules(Sensor *hcSensors, LED *leds) {
 
 int ChooseModule() {
 	int choice = 0;
-	printf("Choose which module to use");
+	printf("Choose which module to use\n");
 	printf("\nSoil Moisture Sensor (1)");
 	printf("\nUltrasonic Sensor (2)");
 	printf("\nTemperature/ Humidity Sensor (3)");
@@ -163,7 +155,7 @@ int ChooseModule() {
 void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int sensorCount) {
 	int i, j;
 
-	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
+	printf("Breadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
 	printf("Watt: %.1f\n", myTemplate->m_Breadboard.m_Watt);
 	if (sensorCount != 0) {
 		printf("Sensors:\n");
@@ -204,11 +196,11 @@ void CalculateUniquePins(Breadboard* b) {
 
 int PinError(Breadboard* b, int usedPins) {
 	if (b->m_UniquePins < usedPins) {
-		printf("***No more unique pins available, pick a bigger board***");
+		printf("\n***No more unique pins available, pick a bigger board***\n");
 		return 1;
 	}
 	if (b->m_UniquePins * 0.5 < usedPins) {
-		printf("***You're running out of unique pins, pick a bigger board***");
+		printf("\n***You're running out of unique pins, pick a bigger board***\n");
 		return 1;
 	}
 
