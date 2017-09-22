@@ -1,6 +1,7 @@
 #include "Source.h"
 #define STD_PIN_DISTANCE 2.54 
 
+
 int main() {
 	MyTemplate myBreadboardwComponents = { NULL, NULL, NULL, false };
 	int usedPins = 0;
@@ -14,7 +15,7 @@ int main() {
 	case 1: { // new breadboard
 		Breadboard newBreadboard;
 		FillNewBreadboard(&newBreadboard);
-		newBreadboard.m_Connections = CalcConnections(&newBreadboard.m_Pins_X, &newBreadboard.m_Pins_Y, STD_PIN_DISTANCE);
+		newBreadboard.m_Connections = CalcConnections(&newBreadboard.m_Pins_X, &newBreadboard.m_Pins_Y);
 		printf("\nNew breadboard created with the following properties");
 		PrintInfoBreadboard(newBreadboard);
 		myBreadboardwComponents.m_Breadboard = newBreadboard;
@@ -32,79 +33,77 @@ int main() {
 	}
 	}
 
-	int choice = ComponentsMenu(); //new sensor, new LED, use existing
-	switch (choice) {
+	int LEDCount = 0, sensorCount = 0;
+	char chooseAgain = 'y';
+	while (chooseAgain == 'y') {
+		int choice = ComponentsMenu(); //new sensor, new LED, use existing
 
-	case 1: { //new sensor
-		Sensor newSensor;
-		FillNewSensor(&newSensor);
-		PrintInfoSensor(newSensor);
-		myBreadboardwComponents.m_Sensors[0] = newSensor;
-		break;
-	}
-	case 2: {//new LED
-		LED newLED;
-		FillNewLED(&newLED);
-		printf("\nNew LED created with the following properties");
-		PrintInfoLED(newLED);
-		myBreadboardwComponents.m_LEDs[0] = newLED;
-		usedPins=+2;
-		break;
-	}
-	case 3: {//use existing
-		Sensor hcS1, hcS2, hcS3;
-		LED hcLED1, hcLED2, hcLED3;
-		int moduleChoice;
+		switch (choice) {
 
-		HardCodeModules(&hcS1, &hcS2, &hcS3, &hcLED1, &hcLED2, &hcLED3);
+		case 1: { //new sensor
+			Sensor newSensor;
 
-		moduleChoice = ChooseModule();
-		switch (moduleChoice) {
-		case 1: {
-			myBreadboardwComponents.m_Sensors[0] = hcS1;
-			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
-			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+			FillNewSensor(&newSensor);
+			PrintInfoSensor(newSensor);
+			myBreadboardwComponents.m_Sensors[sensorCount] = newSensor;
+			usedPins = usedPins + myBreadboardwComponents.m_Sensors[sensorCount].m_NumberOfPins;
+			sensorCount++;
+			getchar();
+			printf("Choose again (y/n)?");
+			chooseAgain = getchar();
+
 			break;
 		}
-		case 2: {
-			myBreadboardwComponents.m_Sensors[0] = hcS2;
-			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
-			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+		case 2: {//new LED
+			LED newLED;
+			FillNewLED(&newLED);
+			printf("\nNew LED created with the following properties");
+			PrintInfoLED(newLED);
+			myBreadboardwComponents.m_LEDs[LEDCount] = newLED;
+			usedPins = usedPins + 4;
+			LEDCount++;
+
+			getchar();
+			printf("Choose again (y/n)?");
+			chooseAgain = getchar();
+
 			break;
 		}
-		case 3: {
-			myBreadboardwComponents.m_Sensors[0] = hcS3;
-			usedPins = +myBreadboardwComponents.m_Sensors[0].m_NumberOfPins;
-			myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+		case 3: {//use existing
+			Sensor hcSensors[3];
+			LED hcLEDs[3];
+			int moduleChoice;
+
+			HardCodeModules(hcSensors, hcLEDs);
+
+			moduleChoice = ChooseModule();
+
+			if (moduleChoice < 3) {
+				myBreadboardwComponents.m_Sensors[sensorCount] = hcSensors[moduleChoice - 1];
+				usedPins = usedPins + myBreadboardwComponents.m_Sensors[sensorCount].m_NumberOfPins;
+				myBreadboardwComponents.useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+				sensorCount++;
+			}
+
+			else {
+				myBreadboardwComponents.m_LEDs[LEDCount] = hcLEDs[moduleChoice - 4];
+				usedPins = usedPins + 2; //två för led, två för resistorn 
+				LEDCount++;
+			}
+
+			getchar();
+			printf("Choose again (y/n)?");
+			chooseAgain = getchar();
 			break;
 		}
-		case 4: {
-			myBreadboardwComponents.m_LEDs[0] = hcLED1;
-			usedPins = +4; //två för led, två för resistorn 
-			break;
 		}
-		case 5: {
-			myBreadboardwComponents.m_LEDs[0] = hcLED2;
-			usedPins = +4;
-			break;
-		}
-		case 6: {
-			myBreadboardwComponents.m_LEDs[0] = hcLED3;
-			usedPins = +4;
-			break;
-		}
-		}
-		
-		break;
-	}
 	}
 
 	getchar();
 	//int check = PinsError(&myBreadboardwComponents.m_Breadboard, usedPins);
-	PrintInfoMyTemplate(myBreadboardwComponents);
-	
+	PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
+
 	getchar();
 
 	return 0;
 }
-
