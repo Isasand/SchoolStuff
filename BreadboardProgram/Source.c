@@ -101,6 +101,9 @@ int main() {
 
 	getchar();
 	//int check = PinsError(&myBreadboardwComponents.m_Breadboard, usedPins);
+	CalculateUniquePins(&myBreadboardwComponents->m_Breadboard);
+	PinError(&myBreadboardwComponents->m_Breadboard, usedPins);
+	CalculateWatt(&myBreadboardwComponents->m_Breadboard.m_OperatingVoltage, &myBreadboardwComponents->m_Breadboard.m_Ampere, &myBreadboardwComponents->m_Breadboard.m_Watt);
 	PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
 
 	getchar();

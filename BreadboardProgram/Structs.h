@@ -11,6 +11,8 @@ typedef struct {
 	int m_Connections;
 	float m_OperatingVoltage;
 	float m_Ampere;
+	float m_Watt;
+	float m_UniquePins;
 } Breadboard;
 
 typedef struct {

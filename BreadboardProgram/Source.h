@@ -6,10 +6,8 @@
 #include <stdlib.h>
 
 
-void CalculateWatt(float *volt, float *ampere) {
-	float watt = 0;
-
-	return watt = (*volt) * (*ampere);
+void CalculateWatt(float *volt, float *ampere, float *watt) {
+	(*watt) = (*volt) * (*ampere);
 }
 
 
@@ -58,7 +56,7 @@ void PrintInfoBreadboard(Breadboard b) {
 	printf("Pins (Horizontal): %d \n", b.m_Pins_Y);
 	printf("Available pin connections: %d\n", b.m_Connections);
 	printf("Operating voltage: %.1fV\n", b.m_OperatingVoltage);
-	printf("Ampere: %2.f\n", b.m_Ampere);
+	printf("Ampere: %.1f\n", b.m_Ampere);
 }
 
 int ComponentsMenu() {
@@ -165,14 +163,12 @@ int ChooseModule() {
 void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int sensorCount) {
 	int i, j;
 
-
 	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
+	printf("Watt: %.1f\n", myTemplate->m_Breadboard.m_Watt);
 	if (sensorCount != 0) {
 		printf("Sensors:\n");
 		for (i = 0; i < sensorCount; i++) {
-			printf("%s", myTemplate->m_Sensors[i].m_SensorType);
-
-
+			printf("%s\n", myTemplate->m_Sensors[i].m_SensorType);
 		}
 	}
 
@@ -187,6 +183,7 @@ void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int
 	}
 
 	printf("\nUsed pins: %d", usedPins);
+
 }
 
 int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins) {
@@ -201,19 +198,22 @@ int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins) {
 	}
 }
 
-/*int PinsError(Breadboard *b, int usedPins) {
-float approxUniquePins = ((b->m_Pins_X) * 2);
-approxUniquePins = approxUniquePins * 0.6; //vi måste räkna marginal för att en placerar ut grejerna + pinsen ligger inte bredvid varandra
-if (usedPins > approxUniquePins) {
-return 1;
+void CalculateUniquePins(Breadboard* b) {
+	b->m_UniquePins = b->m_Pins_X * 2;
 }
-else {
-return 0;
-}
-}*/
 
-/*void ChooseHCSensor(MyTemplate *myBreadboardwComponents, Sensor *hardcodedSensor, int *usedPins){
-myBreadboardwComponents->m_Sensors[0] = hardcodedSensor;
-usedPins = +myBreadboardwComponents->m_Sensors[0].m_NumberOfPins;
-myBreadboardwComponents->useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
-}*/
+int PinError(Breadboard* b, int usedPins) {
+	if (b->m_UniquePins < usedPins) {
+		printf("***No more unique pins available, pick a bigger board***");
+		return 1;
+	}
+	if (b->m_UniquePins * 0.5 < usedPins) {
+		printf("***You're running out of unique pins, pick a bigger board***");
+		return 1;
+	}
+
+	else {
+		return 0;
+	}
+
+}
