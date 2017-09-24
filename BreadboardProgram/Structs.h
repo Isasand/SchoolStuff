@@ -31,8 +31,6 @@ typedef struct {
 	char m_Color[20];
 	float m_MaxOperatingVoltage;
 	float m_MinOperatingVoltage;
-	float m_Ampere;
-	float m_Watt;
 } LED;
 
 //struct containing all your chosen components 
