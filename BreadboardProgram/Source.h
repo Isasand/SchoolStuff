@@ -9,10 +9,12 @@
 #define USING_AMPERE_AND_WATT false
 
 #if USING_AMPERE_AND_WATT
+void CalculateComponentWatt(float *volt, float *ampere, float *watt);
 int TotalWattCalculation(MyTemplate *breadboardWComponents, int sensorCount, int LEDCount);
 void PowerErrorMessage(int totalWatt, Breadboard b);
 
 #else 
+int CalculateComponentWatt();
 int TotalWattCalculation();
 int PowerErrorMessage();
 

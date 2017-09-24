@@ -142,7 +142,6 @@ int main() {
 		//check if used pins are equal to unique pins on board (and print warning if 50 % are used)
 		PinError(&myBreadboardwComponents->m_Breadboard, usedPins);
 
-		//calculate breadboard watt if using it (defined in source.h)
 		CalculateWatt(&myBreadboardwComponents->m_Breadboard.m_OperatingVoltage, &myBreadboardwComponents->m_Breadboard.m_Ampere, &myBreadboardwComponents->m_Breadboard.m_Watt);
 
 		//print information about struct containing all your components 
@@ -167,6 +166,9 @@ Function definitions
 #if USING_AMPERE_AND_WATT
 //here are functions defined if using sensor ampere and watt, its hard to find specs containing
 //info about components max watt and ampere, so default is not using it 
+void CalculateComponentWatt(float *volt, float *ampere, float *watt) {
+	(*watt) = (*volt) * (*ampere);
+}
 
 int TotalWattCalculation(MyTemplate *breadboardWComponents, int sensorCount, int LEDCount) {
 	int totalWatt = 0;
@@ -189,6 +191,9 @@ void PowerErrorMessage(int totalWatt, Breadboard b) {
 
 #else 
 
+int CalculateComponentWatt(){
+	return 0;
+}
 
 int TotalWattCalculation() {
 	return 0;
@@ -331,15 +336,15 @@ void HardCodeModules(Sensor *hcSensors, LED *leds) {
 	//hard codes three sensors and three leds to choose in program 
 	strcpy(hcSensors[0].m_SensorType, "Soil Moisture Sensor");
 	strcpy(hcSensors[0].m_Model, "LM393");
-	hcSensors[0].m_NumberOfPins = 4; hcSensors[0].m_MaxOperatingVoltage = 5; hcSensors[0].m_MinOperatingVoltage = 3.3;
+	hcSensors[0].m_NumberOfPins = 4; hcSensors[0].m_MaxOperatingVoltage = 5; hcSensors[0].m_MinOperatingVoltage = 3.3; if (USING_AMPERE_AND_WATT) hcSensors[0].m_Ampere = 0.1;
 
 	strcpy(hcSensors[1].m_SensorType, "Ultrasonic Sensor");
 	strcpy(hcSensors[1].m_Model, "HC-SR04");
-	hcSensors[1].m_NumberOfPins = 4; hcSensors[1].m_MaxOperatingVoltage = 5; hcSensors[1].m_MinOperatingVoltage = 5;
+	hcSensors[1].m_NumberOfPins = 4; hcSensors[1].m_MaxOperatingVoltage = 5; hcSensors[1].m_MinOperatingVoltage = 5; if (USING_AMPERE_AND_WATT) hcSensors[1].m_Ampere = 0.1;
 
 	strcpy(hcSensors[2].m_SensorType, "Temperature/ Humidity Sensor");
 	strcpy(hcSensors[2].m_Model, "DHT11");
-	hcSensors[2].m_NumberOfPins = 3; hcSensors[2].m_MaxOperatingVoltage = 5; hcSensors[2].m_MinOperatingVoltage = 5;
+	hcSensors[2].m_NumberOfPins = 3; hcSensors[2].m_MaxOperatingVoltage = 5; hcSensors[2].m_MinOperatingVoltage = 5; if(USING_AMPERE_AND_WATT) hcSensors[2].m_Ampere = 0.1;
 
 	strcpy(leds[0].m_Color, "Red"); leds[0].m_MaxOperatingVoltage = 2.2; leds[0].m_MinOperatingVoltage = 1.8;
 	strcpy(leds[1].m_Color, "Green"); leds[1].m_MaxOperatingVoltage = 2.2; leds[1].m_MinOperatingVoltage = 1.8;
