@@ -10,7 +10,7 @@ typedef struct {
 	int m_Pins_Y;
 	int m_Connections;
 	float m_OperatingVoltage;
-	float m_Ampere; //dessa kan användas för att räkna ut watt, men i mitt program så väljer jag att ta bort det 
+	float m_Ampere; 
 	float m_Watt;
 	float m_UniquePins;
 } Breadboard;
@@ -22,7 +22,7 @@ typedef struct {
 	int m_NumberOfPins;
 	float m_MaxOperatingVoltage;
 	float m_MinOperatingVoltage;
-	float m_Ampere;
+	float m_Ampere; //dessa kan användas för att räkna ut watt, men i mitt program så väljer jag att ta bort det 
 	float m_Watt;
 } Sensor;
 

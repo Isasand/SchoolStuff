@@ -11,6 +11,8 @@ int main() {
 		int usedPins = 0;
 
 		int menuChoice;
+
+
 		system("CLS");
 		menuChoice = Menu();
 		getchar();
@@ -55,6 +57,7 @@ int main() {
 			break;
 		}
 		}
+
 
 		//counters for number of leds and number of sensors chosen
 		//used in print functions and for filling the struct containing all components
@@ -142,7 +145,7 @@ int main() {
 		//check if used pins are equal to unique pins on board (and print warning if 50 % are used)
 		PinError(&myBreadboardwComponents->m_Breadboard, usedPins);
 
-		CalculateWatt(&myBreadboardwComponents->m_Breadboard.m_OperatingVoltage, &myBreadboardwComponents->m_Breadboard.m_Ampere, &myBreadboardwComponents->m_Breadboard.m_Watt);
+		CalculateBreadboardWatt(&myBreadboardwComponents->m_Breadboard.m_OperatingVoltage, &myBreadboardwComponents->m_Breadboard.m_Ampere, &myBreadboardwComponents->m_Breadboard.m_Watt);
 
 		//print information about struct containing all your components 
 		PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
@@ -182,7 +185,7 @@ int TotalWattCalculation(MyTemplate *breadboardWComponents, int sensorCount, int
 	return totalWatt;
 }
 
-void PowerErrorMessage(int totalWatt, Breadboard b) {
+void PowerErrorMessage(int totalWatt, Breadboard b) { 
 
 	if (totalWatt > b.m_Watt) {
 		printf("***Total effect of components to high***");
@@ -191,7 +194,7 @@ void PowerErrorMessage(int totalWatt, Breadboard b) {
 
 #else 
 
-int CalculateComponentWatt(){
+int CalculateComponentWatt() {
 	return 0;
 }
 
@@ -205,7 +208,7 @@ int PowerErrorMessage() {
 
 #endif
 
-void CalculateWatt(float *volt, float *ampere, float *watt) {
+void CalculateBreadboardWatt(float *volt, float *ampere, float *watt) {
 	(*watt) = (*volt) * (*ampere);
 }
 
@@ -219,7 +222,7 @@ int Menu() {
 }
 
 void FillNewBreadboard(Breadboard *b) {
-	float lenght = 0, width = 0, opVoltage = 0, ampere = 0;
+	float lenght = 0.0, width = 0.0, opVoltage = 0.0, ampere = 0.0;
 	int connections = 0;
 	printf("Number of pins (vertical): ");
 	scanf_s("%f", &lenght);
@@ -326,8 +329,8 @@ void PrintInfoLED(LED led) {
 
 void HardCodeBreadboard(Breadboard *a) {
 	//hard codes a breadboard
-	a->m_Pins_X = 120; a->m_Pins_Y = 42;
-	a->m_Connections = 781;
+	a->m_Pins_X = 20; a->m_Pins_Y = 10;
+	a->m_Connections = 200;
 	a->m_OperatingVoltage = 5;
 	a->m_Ampere = 0.5;
 }
@@ -344,7 +347,7 @@ void HardCodeModules(Sensor *hcSensors, LED *leds) {
 
 	strcpy(hcSensors[2].m_SensorType, "Temperature/ Humidity Sensor");
 	strcpy(hcSensors[2].m_Model, "DHT11");
-	hcSensors[2].m_NumberOfPins = 3; hcSensors[2].m_MaxOperatingVoltage = 5; hcSensors[2].m_MinOperatingVoltage = 5; if(USING_AMPERE_AND_WATT) hcSensors[2].m_Ampere = 0.1;
+	hcSensors[2].m_NumberOfPins = 3; hcSensors[2].m_MaxOperatingVoltage = 5; hcSensors[2].m_MinOperatingVoltage = 5; if (USING_AMPERE_AND_WATT) hcSensors[2].m_Ampere = 0.1;
 
 	strcpy(leds[0].m_Color, "Red"); leds[0].m_MaxOperatingVoltage = 2.2; leds[0].m_MinOperatingVoltage = 1.8;
 	strcpy(leds[1].m_Color, "Green"); leds[1].m_MaxOperatingVoltage = 2.2; leds[1].m_MinOperatingVoltage = 1.8;

@@ -20,7 +20,7 @@ int PowerErrorMessage();
 
 #endif
 
-void CalculateWatt(float *volt, float *ampere, float *watt);
+void CalculateBreadboardWatt(float *volt, float *ampere, float *watt);
 
 int Menu();
 
