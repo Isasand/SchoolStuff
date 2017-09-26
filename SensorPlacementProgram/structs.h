@@ -26,6 +26,7 @@ typedef struct {
 	float m_Watt;
 	int m_Anod_Placement;
 	int m_Katod_Placement;
+	int m_Widht;
 } Sensor;
 
 //LED struct

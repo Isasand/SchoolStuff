@@ -52,7 +52,7 @@ int ComponentsMenu() {
 
 void FillNewSensor(Sensor *s) {
 	char *sensorType = malloc(50), *model = malloc(20);
-	int numberOfPins = 0, anod = 0, widht = 0;
+	int numberOfPins = 0, anod = 0, lenght = 0, widht = 0;
 	float maxOpVolt = 0.0, minOpVolt = 0.0, ampere = 0.0;
 
 	printf("Sensor type: ");
@@ -79,9 +79,12 @@ void FillNewSensor(Sensor *s) {
 	printf("Anod Placement: ");
 	scanf_s("%d", &anod);
 	s->m_Anod_Placement = anod;
-	printf("Width of sensor (in pins): ");
+	printf("lenght of sensor (in pins): ");
+	scanf_s("%d", &lenght);
+	s->m_Katod_Placement = (s->m_Anod_Placement + lenght);
+	printf("widht of sensor (in pins): ");
 	scanf_s("%d", &widht);
-	s->m_Katod_Placement = (s->m_Anod_Placement + widht);
+	s->m_Widht = (widht);
 	getchar();
 	free(sensorType);
 	free(model);

@@ -31,13 +31,16 @@ int main()
 		usedPins = usedPins + myBreadboardwComponents->m_Sensors[sensorCount].m_NumberOfPins;
 		//myBreadboardwComponents->useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
 		
-		int anod = 0, widht = 0;
+		int anod = 0, lenght = 0, widht = 0; // todo function of this
 		printf("Anod Placement: ");
 		scanf_s("%d", &anod);
 		myBreadboardwComponents->m_Sensors[sensorCount].m_Anod_Placement = anod;
-		printf("Width of sensor (in pins): ");
+		printf("Lenght of sensor (in pins): ");
+		scanf_s("%d", &lenght);
+		myBreadboardwComponents->m_Sensors[sensorCount].m_Katod_Placement = (myBreadboardwComponents->m_Sensors[sensorCount].m_Anod_Placement + (lenght - 1));
+		printf("Widht of sensor (in pins): ");
 		scanf_s("%d", &widht);
-		myBreadboardwComponents->m_Sensors[sensorCount].m_Katod_Placement = (myBreadboardwComponents->m_Sensors[sensorCount].m_Anod_Placement + widht);
+		myBreadboardwComponents->m_Sensors[sensorCount].m_Widht = widht;
 		getchar();
 		sensorCount++;
 	}
@@ -61,10 +64,14 @@ int main()
 	for (int i = 0; i < sensorCount; i++) {
 		visualBoard[0][myBreadboardwComponents->m_Sensors[i].m_Anod_Placement-1]
 		= 'S';
-		visualBoard[0]
-			[myBreadboardwComponents->m_Sensors[i].m_Katod_Placement-1]
+		visualBoard[0][myBreadboardwComponents->m_Sensors[i].m_Katod_Placement-1]
 		= 'S';
-
+		visualBoard[myBreadboardwComponents->m_Sensors[i].m_Widht - 1]
+			[myBreadboardwComponents->m_Sensors[i].m_Anod_Placement - 1]
+		= 'S';
+		visualBoard[myBreadboardwComponents->m_Sensors[i].m_Widht - 1]
+			[myBreadboardwComponents->m_Sensors[i].m_Katod_Placement - 1]
+		= 'S';
 	}
 
 	printf("\nAdded sensor:\n");
@@ -76,9 +83,5 @@ int main()
 	}
 	getchar();
 	return 0;
-
-}
-
-void AddPlacement(){
 
 }
