@@ -104,7 +104,6 @@ int main() {
 				//the rest are LEDs
 				else {
 					AttachLED(&hcLEDs[moduleChoice - 4]);
-
 					SetLEDSymbol(&hcLEDs[moduleChoice - 4]);
 					myBreadboardwComponents->m_LEDs[LEDCount] = hcLEDs[moduleChoice - 4];
 					usedPins = usedPins + 2;
@@ -132,6 +131,7 @@ int main() {
 		}
 		case 4: { //preview breadboard
 			PrintVisualBreadboard(myBreadboardwComponents, sensorCount, LEDCount);
+			PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
 			getchar();
 			break;
 
@@ -150,10 +150,7 @@ int main() {
 		/*system("CLS");
 		getchar();
 		//print information about struct containing all your components
-		PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
-
-		getchar();
-
+		
 		free(myBreadboardwComponents);*/
 	}
 
@@ -272,9 +269,11 @@ int PickComponent(MyTemplate *breadboardWComponents, int cSensors, int cLEDs) {
 	}
 
 	if (cLEDs != 0) {
-		for (i = cSensors; i < cLEDs; i++) {
-			//print sensor type 
-			printf("%d.LED (Color: %s)\n", i + 1, breadboardWComponents->m_LEDs[i].m_Color);
+		for (i = cSensors-1; i < cLEDs; i++) {
+			//print led
+			if (breadboardWComponents->m_LEDs[i].m_Symbol != 'X') {
+				printf("%d. LED (Color: %s)\n", i + 1, breadboardWComponents->m_LEDs[i].m_Color);
+			}
 		}
 	}
 	scanf("%d", &pickedComponent);
