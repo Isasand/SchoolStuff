@@ -1,17 +1,16 @@
 #pragma once
-#define USING_AMPERE_AND_WATT false
+
 
 typedef int bool;
 #define true 1
 #define false 0
 
+//breadboard struct
 typedef struct {
 	int m_Pins_X;
 	int m_Pins_Y;
 	int m_Connections;
 	float m_OperatingVoltage;
-	float m_Ampere;
-	float m_Watt;
 	float m_UniquePins;
 } Breadboard;
 
@@ -22,11 +21,11 @@ typedef struct {
 	int m_NumberOfPins;
 	float m_MaxOperatingVoltage;
 	float m_MinOperatingVoltage;
-	float m_Ampere; //dessa kan användas för att räkna ut watt, men i mitt program så väljer jag att ta bort det 
-	float m_Watt;
-	int m_Anod_Placement;
-	int m_Katod_Placement;
-	int m_Widht;
+	int m_AnodX;
+	int m_AnodY;
+	int m_KatodX;
+	int m_KatodY;
+	char m_Symbol;
 } Sensor;
 
 //LED struct
@@ -34,6 +33,11 @@ typedef struct {
 	char m_Color[20];
 	float m_MaxOperatingVoltage;
 	float m_MinOperatingVoltage;
+	int m_AnodX;
+	int m_AnodY;
+	int m_KatodX;
+	int m_KatodY;
+	char m_Symbol; 
 } LED;
 
 //struct containing all your chosen components 
