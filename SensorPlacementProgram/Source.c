@@ -117,7 +117,7 @@ int main() {
 			break;
 		}
 		case 3: { //move/remove attached component
-
+			
 			if (sensorCount == 0 && LEDCount == 0) {
 				printf("Breadboard is empty");
 				Sleep(400);
@@ -129,15 +129,31 @@ int main() {
 			MvRm(myBreadboardwComponents, pickComponent, sensorCount, LEDCount);
 			break;
 		}
-		case 4: { //preview breadboard
+
+		case 4: { //clear breadboard
+			char sure = 'Y';
+			system("CLS");
+			printf("***Are you sure you want to clear your breadbord of all components? (Y/n)***");
+			scanf("%c", &sure);
+			if (sure == 'n') {
+				break;
+			}
+			free(myBreadboardwComponents);
+			MyTemplate *myBreadboardwComponents = malloc(sizeof(MyTemplate));
+			sensorCount = 0;
+			LEDCount = 0;
+		}
+
+		case 5: { //preview breadboard
 			PrintVisualBreadboard(myBreadboardwComponents, sensorCount, LEDCount);
 			PrintInfoMyTemplate(myBreadboardwComponents, usedPins, LEDCount, sensorCount);
+			printf("\n\nOK<ENTER>");
 			getchar();
 			break;
 
 		}
 
-		case 5: { // exit program
+		case 6: { // exit program
 			free(myBreadboardwComponents);
 			system("CLS");
 			printf("Closing program");
@@ -146,12 +162,6 @@ int main() {
 			break;
 		}
 		}
-
-		/*system("CLS");
-		getchar();
-		//print information about struct containing all your components
-		
-		free(myBreadboardwComponents);*/
 	}
 
 	return 0;
@@ -210,8 +220,9 @@ int Menu() {
 	printf("1. Attach new component\n");
 	printf("2. Attach existing component\n");
 	printf("3. Move/ remove attached component\n");
-	printf("4. Preview breadboard\n");
-	printf("5. Exit\n");
+	printf("4. Clear breadboard\n");
+	printf("5. preview breadboard\n");
+	printf("6. Exit\n");
 	scanf_s("%d", &choice);
 	return choice;
 }
@@ -288,15 +299,10 @@ void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, 
 
 	printf("1. Move Component\n");
 	printf("2. Remove Component\n");
-	printf("3. Clear breadboard\n");
 	scanf("%d", &mvOrRm);
 
-	if (mvOrRm == 3) {
-		printf("I will clear the breadboard here");
-	}
-
 	//if pickedComponent is smaller than cSensors, the picked component is a sensor
-	else if (pickedComponent <= cSensors) {
+	if (pickedComponent <= cSensors) {
 		if (mvOrRm == 1) {
 			AttachSensor(&breadboardWComponents->m_Sensors[pickedComponent - 1]);
 		}
@@ -328,6 +334,12 @@ void RmSensor(Sensor *sensor) {
 
 void RmLED(LED *led) {
 	led->m_Symbol = 'X';
+}
+
+MyTemplate* Clearbreadboard(MyTemplate* myTemplate) {
+	free(myTemplate);
+	MyTemplate *newEmptyTemplate = malloc(sizeof(MyTemplate));
+	return newEmptyTemplate;
 }
 
 void PrintInfoBreadboard(Breadboard b) {
