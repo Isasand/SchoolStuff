@@ -4,7 +4,7 @@ int main() {
 	bool restart = true;
 
 	//counter for used pins, choosed LEDs, choosed sensors
-	int usedPins = 0, LEDCount = 0, sensorCount = 0, pickComponent = 0, check = 0;
+	int usedPins = 0, LEDCount = 0, sensorCount = 0, pickComponent = 0;
 	MyTemplate *myBreadboardwComponents = malloc(sizeof(MyTemplate));
 	Breadboard hcBreadboard;
 	HardCodeBreadboard(&hcBreadboard);
@@ -40,14 +40,11 @@ int main() {
 					FillNewSensor(&newSensor);
 					AttachSensor(&newSensor);
 					SetSensorSymbol(&newSensor);
-					PrintInfoSensor(newSensor);
-					//add sensor to struct containing all your components
+					//PrintInfoSensor(newSensor);
 					myBreadboardwComponents->m_Sensors[sensorCount] = newSensor;
 					//add sensor's number of pins to used pins 
 					usedPins = usedPins + myBreadboardwComponents->m_Sensors[sensorCount].m_NumberOfPins;
 					sensorCount++;
-
-
 					getchar();
 					printf("Choose again (y/n)?");
 					chooseAgain = getchar();
@@ -62,9 +59,8 @@ int main() {
 					FillNewLED(&newLED);
 					AttachLED(&newLED);
 					SetLEDSymbol(&newLED);
-					printf("\nNew LED created with the following properties");
-					PrintInfoLED(newLED);
-					//add leds to struct containing all your components
+					//printf("\nNew LED created with the following properties");
+					//PrintInfoLED(newLED);
 					myBreadboardwComponents->m_LEDs[LEDCount] = newLED;
 					usedPins = usedPins + 2;
 					LEDCount++;
@@ -97,7 +93,7 @@ int main() {
 					SetSensorSymbol(&hcSensors[moduleChoice - 1]);
 					myBreadboardwComponents->m_Sensors[sensorCount] = hcSensors[moduleChoice - 1];
 					usedPins = usedPins + myBreadboardwComponents->m_Sensors[sensorCount].m_NumberOfPins;
-					myBreadboardwComponents->useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins);
+					myBreadboardwComponents->useOfPotentiometer = CheckMaxVoltage(myBreadboardwComponents, &usedPins, sensorCount);
 					sensorCount++;
 
 				}
@@ -140,8 +136,11 @@ int main() {
 			}
 			free(myBreadboardwComponents);
 			MyTemplate *myBreadboardwComponents = malloc(sizeof(MyTemplate));
+			myBreadboardwComponents->m_Breadboard = hcBreadboard;
 			sensorCount = 0;
 			LEDCount = 0;
+			usedPins = 0;
+			
 		}
 
 		case 5: { //preview breadboard
@@ -163,7 +162,6 @@ int main() {
 		}
 		}
 	}
-
 	return 0;
 }
 
@@ -175,14 +173,6 @@ Function definitions
 *
 *
 */
-
-void SetSensorSymbol(Sensor* sensor) {
-	sensor->m_Symbol = 'S';
-}
-
-void SetLEDSymbol(LED* led) {
-	led->m_Symbol = 'L';
-}
 
 void PrintVisualBreadboard(MyTemplate *myTemplate, int cSensors, int cLEDs) {
 	char board[10][30];
@@ -299,7 +289,7 @@ void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, 
 
 	printf("1. Move Component\n");
 	printf("2. Remove Component\n");
-	scanf("%d", &mvOrRm);
+	scanf("%d", &mvOrRm); 
 
 	//if pickedComponent is smaller than cSensors, the picked component is a sensor
 	if (pickedComponent <= cSensors) {
@@ -308,7 +298,7 @@ void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, 
 		}
 
 		else if (mvOrRm == 2) {
-			RmSensor(&breadboardWComponents->m_Sensors[pickedComponent - 1]);
+			//TODO RmSensor(&breadboardWComponents->m_Sensors[pickedComponent - 1]);
 		}
 	}
 
@@ -318,28 +308,19 @@ void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, 
 		}
 
 		else if (mvOrRm == 2) {
-			RmLED(&breadboardWComponents->m_LEDs[cSensors + cLEDs - pickedComponent - 1]);
-		}//;
+			//TODO RmLED(&breadboardWComponents->m_LEDs[cSensors + cLEDs - pickedComponent - 1]);
+		}
 
 	}
 }
 
-//TODO 
 
-
-void RmSensor(Sensor *sensor) {
-	sensor->m_Symbol = 'X';
+void SetSensorSymbol(Sensor* sensor) {
+	sensor->m_Symbol = 'S';
 }
 
-
-void RmLED(LED *led) {
-	led->m_Symbol = 'X';
-}
-
-MyTemplate* Clearbreadboard(MyTemplate* myTemplate) {
-	free(myTemplate);
-	MyTemplate *newEmptyTemplate = malloc(sizeof(MyTemplate));
-	return newEmptyTemplate;
+void SetLEDSymbol(LED* led) {
+	led->m_Symbol = 'L';
 }
 
 void PrintInfoBreadboard(Breadboard b) {
@@ -481,9 +462,9 @@ void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int
 
 }
 
-int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins) {
+int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins, int sensorCount) {
 	//if breadboards operating voltage is higher than sensors max voltage, we need to add a potentiometer
-	if (myTemplate->m_Breadboard.m_OperatingVoltage > myTemplate->m_Sensors[0].m_MaxOperatingVoltage) {
+	if (myTemplate->m_Breadboard.m_OperatingVoltage > myTemplate->m_Sensors[sensorCount].m_MaxOperatingVoltage) {
 		printf("\n**Since this module needs voltage regulation we added a potentiometer (uses 3 connection pins)**\n");
 		*usedPins = *usedPins + 3;
 		return 1;
@@ -492,27 +473,14 @@ int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins) {
 		return 0;
 	}
 }
-/*
-void CalculateUniquePins(Breadboard* b) {
-	//get unique pins by taking pins_x * 2, breadboards are often designed with two sides being independent from each other
-	b->m_UniquePins = b->m_Pins_X * 2;
+
+
+//TODO 
+void RmSensor(Sensor *sensor) {
+
 }
 
-int PinError(Breadboard* b, int usedPins) {
-	//if used pins are bigger than the unique pins on the board
-	if (b->m_UniquePins < usedPins) {
-		printf("\n***No more unique pins available, pick a bigger board***\n");
-		return 1;
-	}
-	//if you used half of the unique pins, print warning.
-	//because the pins are rarely placed right next to each other
-	if (b->m_UniquePins * 0.5 < usedPins) {
-		printf("\n***You're running out of unique pins, pick a bigger board***\n");
-		return 1;
-	}
 
-	else {
-		return 0;
-	}
+void RmLED(LED *led) {
 
-}*/
+}

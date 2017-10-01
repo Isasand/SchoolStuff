@@ -7,27 +7,21 @@
 #include <Windows.h>
 
 
-void SetSensorSymbol(Sensor* sensor);
+void PrintVisualBreadboard(MyTemplate *myTemplate, int cSensors, int cLEDs);
 
-void SetLEDSymbol(LED* led);
-
-void PrintVisualBreadboard(MyTemplate *breadboard, int cSensors, int cLEDs);
-
-void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, int cLEDs);
-
-
-void RmSensor(Sensor *sensor);
-
-
-void RmLED(LED *led);
+int Menu();
 
 void AttachSensor(Sensor *sensor);
 
 void AttachLED(LED *led);
 
-int PickComponent(MyTemplate *breadboardWComponents, int cSensors, int cLED);
+int PickComponent(MyTemplate *breadboardWComponents, int cSensors, int cLEDs);
 
-int Menu();
+void MvRm(MyTemplate *breadboardWComponents, int pickedComponent, int cSensors, int cLEDs);
+
+void SetSensorSymbol(Sensor* sensor);
+
+void SetLEDSymbol(LED* led);
 
 void PrintInfoBreadboard(Breadboard b);
 
@@ -49,8 +43,4 @@ int ChooseModule();
 
 void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int sensorCount);
 
-int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins);
-
-void CalculateUniquePins(Breadboard* b);
-
-int PinError(Breadboard* b, int usedPins);
+int CheckMaxVoltage(MyTemplate *myTemplate, int *usedPins, int sensorCount);

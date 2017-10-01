@@ -1,6 +1,5 @@
 #pragma once
 
-
 typedef int bool;
 #define true 1
 #define false 0
@@ -11,7 +10,6 @@ typedef struct {
 	int m_Pins_Y;
 	int m_Connections;
 	float m_OperatingVoltage;
-	float m_UniquePins;
 } Breadboard;
 
 //Sensor struct
