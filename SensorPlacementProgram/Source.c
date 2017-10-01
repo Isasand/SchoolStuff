@@ -178,10 +178,10 @@ void PrintVisualBreadboard(MyTemplate *myTemplate, int cSensors, int cLEDs) {
 	char board[10][30];
 
 
-	printf("\nMy BreadBoard:\n");
+	printf("\nYour BreadBoard:\n");
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 30; j++) {
-			board[i][j] = 'X';
+			board[i][j] = 'o';
 		}
 	}
 
@@ -217,39 +217,41 @@ int Menu() {
 }
 
 void AttachSensor(Sensor *sensor) {
-	char str[4];
+	char* pstr = malloc(50);
 	int x = 0, y = 0;
 	printf("Input coordinates for sensor anod like x,y: ");
-	scanf("%s", str);
+	scanf("%s", pstr);
 	char s;
-	sscanf(str, "%d %c %d", &x, &s, &y);
+	sscanf(pstr, "%2d %c %2d", &x, &s, &y);
 	sensor->m_AnodX = x;
 	sensor->m_AnodY = y;
 
 
-	printf("\nInput coordinates for sensor katod like x,y: ");
-	scanf("%s", str);
-	sscanf(str, "%d %c %d", &x, &s, &y);
+	printf("Input coordinates for sensor katod like x,y: ");
+	scanf("%s", pstr);
+	sscanf(pstr, "%2d %c %2d", &x, &s, &y);
 	sensor->m_KatodX = x;
 	sensor->m_KatodY = y;
+	free(pstr);
 }
 
 void AttachLED(LED *led) {
-	char str[4];
+	char* pstr = malloc(50);
 	printf("Input coordinates for LED anod like x,y: ");
-	scanf("%s", str);
+	scanf("%s", pstr);
 	char s;
 	int x = 0, y = 0;
-	sscanf(str, "%d %c %d", &x, &s, &y);
+	sscanf(pstr, "%2d %c %2d", &x, &s, &y);
 	led->m_AnodX = x;
 	led->m_AnodY = y;
 
 
-	printf("\nInput coordinates for sensor katod like x,y: ");
-	scanf("%s", str);
-	sscanf(str, "%d %c %d", &x, &s, &y);
+	printf("Input coordinates for LED katod like x,y: ");
+	scanf("%s", pstr);
+	sscanf(pstr, "%2d %c %2d", &x, &s, &y);
 	led->m_KatodX = x;
 	led->m_KatodY = y;
+	free(pstr);
 }
 
 int PickComponent(MyTemplate *breadboardWComponents, int cSensors, int cLEDs) {
@@ -327,11 +329,6 @@ void RmSensor(Sensor *sensor) {
 void RmLED(LED *led) {
 	led->m_Symbol = 'X';
 }
-
-void ClearBoard(MyTemplate *breadboard) {
-
-}
-
 
 void PrintInfoBreadboard(Breadboard b) {
 	printf("Pins (vertical): %d \n", b.m_Pins_X);
@@ -448,7 +445,7 @@ void PrintInfoMyTemplate(MyTemplate *myTemplate, int usedPins, int LEDCount, int
 
 	//use led and sensor count to print all the components you have chosen 
 
-	printf("Breadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
+	printf("\nBreadboard (%d connections, %.1fV)\n", myTemplate->m_Breadboard.m_Connections, myTemplate->m_Breadboard.m_OperatingVoltage);
 	if (sensorCount != 0) {
 		printf("Sensors:\n");
 		for (int i = 0; i < sensorCount; i++) {
