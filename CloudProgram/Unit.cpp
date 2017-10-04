@@ -1,5 +1,9 @@
 #include "Unit.h"
 
+Unit::Unit() {
+
+};
+
 Unit::Unit(std::string name, std::string info, bool status, int id) {
 
 	m_Name = name;

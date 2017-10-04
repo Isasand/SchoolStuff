@@ -9,6 +9,7 @@
 class Unit
 {
 public:
+	Unit();
 	Unit(std::string, std::string, bool, int);
 	~Unit();
 

@@ -2,7 +2,6 @@
 
 #include "Config.h"
 
-
 #if USING_VISUAL_STUDIO 
 #include <Windows.h>
 
@@ -10,20 +9,19 @@ void SleepFunction(int milliseconds){
 	Sleep(milliseconds);
 }
 
-void ClearFunction() {
+void ClearScreenFunction() {
 	system("CLS");
 }
 
-#else if 
-
+#else  
 #include <stdlib.h>
-
-void SleepFunction(int milliseconds) { 
-	milliseconds * 1000;
-	usleep(milliseconds);
+#include "bajs"
+void SleepFunction(int microseconds) { 
+	microseconds * 1000;
+	usleep(microseconds);
 }
 
-void ClearFunction() {
+void ClearScreenFunction() {
 	system("clear");
 }
 

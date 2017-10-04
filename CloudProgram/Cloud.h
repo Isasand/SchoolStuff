@@ -8,7 +8,7 @@ public:
 	Cloud();
 	~Cloud();
 
-	void StartMenu();
+	int StartMenu();
 	void AddUnit(Unit* newUnit);
 	void RemoveUnit(int UnitID);
 	void RemoveAllUnits();
