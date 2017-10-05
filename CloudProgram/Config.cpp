@@ -15,7 +15,6 @@ void ClearScreenFunction() {
 
 #else  
 #include <stdlib.h>
-#include "bajs"
 void SleepFunction(int microseconds) { 
 	microseconds * 1000;
 	usleep(microseconds);

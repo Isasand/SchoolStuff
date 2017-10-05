@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Config.h"
 #include "Cloud.h"
 #include "Unit.h"
 
@@ -23,12 +22,23 @@ int main() {
 		}
 
 		case 2: {// add unit
-			Unit *unit = new Unit("Unit1", "first unit", false, 1);
+			Unit *unit = new Unit();
+			cloud->FillNewUnit(unit);
 			cloud->AddUnit(unit);
+			std::cout << "OK<ENTER>";
+			std::cin.get();
+			std::cin.get();
 			break;
 		}
 		case 3: {//remove unit
-			//cloud->RemoveUnit(unitID);
+			if (cloud->get_NumberOfUnits() == 0) {
+				std::cout << "No units to remove";
+				SleepFunction(1000);
+				break;
+			}
+			cloud->ListUnits();
+			int unitId = cloud->ChooseUnitById();
+			cloud->RemoveUnit(unitId);
 			break;
 		}
 		case 4: { //show dashboard

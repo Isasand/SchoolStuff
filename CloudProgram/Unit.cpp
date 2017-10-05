@@ -1,17 +1,19 @@
 #include "Unit.h"
 
 Unit::Unit() {
-
+	m_Status = false;
 };
 
 Unit::Unit(std::string name, std::string info, bool status, int id) {
 
 	m_Name = name;
 	m_Info = info;
-	m_Status = false;
+	m_Status = status;
 	m_Id = id;
 
 };
+
+Unit::~Unit() {};
 
 std::string Unit::get_Name() {
 	return m_Name;

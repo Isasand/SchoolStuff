@@ -5,7 +5,6 @@
 #include <vector>
 
 
-
 class Unit
 {
 public:
@@ -21,11 +20,10 @@ public:
 	void set_Id(int);
 	bool get_Status();
 	void set_Status(bool);
-private:
 
+private:
 	std::string m_Name;
 	std::string m_Info;
 	bool m_Status;
 	int m_Id;
 };
-
