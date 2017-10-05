@@ -11,7 +11,7 @@ public:
 	std::string get_Info();
 	int get_Id();
 
-//protected:
+//proteced:
 	std::string m_Info;
 	std::string m_Command;
 	int m_Id;

@@ -15,14 +15,13 @@ public:
 	void LoadCommands();
 	void ExitProgram();
 	int get_ExecutedCommands();
+	void PrintCow();
+
 protected: 
+
 	std::vector<Command*> m_Commands;
 	int m_ExecutedCommands;
 };
-
-
-
-
 
 
 
