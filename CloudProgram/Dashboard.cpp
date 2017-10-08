@@ -1,6 +1,6 @@
 #include "Dashboard.h"
 #include <iomanip>
-
+#include <sstream>
 
 Dashboard::Dashboard()
 {
@@ -105,9 +105,22 @@ void Dashboard::ShowUnits(Cloud* cloud) {
 	PrintTitleBar();
 	PrintRow();
 	for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
-		std::string name = cloud->m_CloudUnits.at(i)->get_Name();
-		std::cout << "|" << name << std::setw(20 - name.size())   << std::setfill(' ')  << "|" << std::endl;
+		int nameLenght = cloud->m_CloudUnits.at(i)->get_Name().size();
+		std::cout << "|" << cloud->m_CloudUnits.at(i)->get_Name()
+			<< std::setw(21 - nameLenght) << std::setfill(' ') << " |";
+
+		int id = cloud->m_CloudUnits.at(i)->get_Id();
+		std::string str;
+		std::stringstream convertToString;
+		convertToString << id;
+		str = convertToString.str();
+
+		std::cout << cloud->m_CloudUnits.at(i)->get_Id()
+			<< std::setw(5 - str.size()) << std::setfill(' ') << "|" ;
+		std::cout << PrintUnitStatus(cloud->m_CloudUnits.at(i)) << std::setw(4) << std::setfill(' ') << " |" << std::endl;
+		PrintRow();
 	}
+	std::cout << std::endl;
 
 }
 
@@ -118,4 +131,8 @@ void Dashboard::PrintRow() {
 }
 void Dashboard::PrintTitleBar() {
 	std::cout << "|UNIT                |ID  |STATE|\n";
+}
+
+std::string Dashboard::PrintUnitStatus(Unit* unit) {
+	return unit->get_Status() ? "ON" : "X ";
 }

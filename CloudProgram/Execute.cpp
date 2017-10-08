@@ -3,16 +3,45 @@
 
 Execute::Execute(std::string argCommand, Cloud* cloud)
 {
+	bool validId = false;
 	m_Cloud = cloud;
 	m_ExecutedCommands = 0;
 	LoadCommands();
 
-	for (int i = 0; i < m_Commands.size(); i++) {
-		if (m_Commands.at(i)->get_Command() == argCommand) {
-			Run(m_Commands.at(i)->m_Id);
-			m_ExecutedCommands++;
+	SplitCommand(argCommand);
+
+	if (m_argUnitId == "not used") {
+		for (int i = 0; i < m_Commands.size(); i++) {
+			if (m_Commands.at(i)->get_Command() == m_argCommand) {
+				Run(m_Commands.at(i)->m_Id, cloud);
+				m_ExecutedCommands++;
+			}
 		}
 	}
+
+	else {
+		try {
+			int id = std::stoi(m_argUnitId);
+			for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
+				if (cloud->m_CloudUnits.at(i)->get_Id() == id) {
+					validId = true;
+				}
+			}
+		}
+		catch (...) {
+			//validId = false;
+		}
+	}
+
+	if (validId) {
+		for (int i = 0; i < m_Commands.size(); i++) {
+			if (m_Commands.at(i)->get_Command() == m_argCommand) {
+				Run(m_Commands.at(i)->m_Id, cloud);
+				m_ExecutedCommands++;
+			}
+		}
+	}
+
 }
 
 Execute::~Execute()
@@ -39,7 +68,7 @@ void Execute::LoadCommands() {
 	this->m_Commands.push_back(showinfo);
 }
 
-void Execute::Run(int commandId) {
+void Execute::Run(int commandId, Cloud* cloud) {
 	switch (commandId) {
 
 	case 1: {
@@ -51,7 +80,7 @@ void Execute::Run(int commandId) {
 		break;
 	}
 	case 3: {//Remove
-		PrintCow();
+
 		break;
 	}
 	case 4: {
@@ -61,23 +90,29 @@ void Execute::Run(int commandId) {
 		Unit *newUnit = new Unit();
 		newUnit = Dashboard::FillNewUnit();
 		Dashboard::AddUnit(newUnit, m_Cloud);
-
 		break;
 	}
 	case 6: {
 		break;
 	}
+	case 7: {
+
+		break;
+
+	}
+	case 8: { //show info
+		for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
+			int id = std::stoi(m_argUnitId);
+			if (id == cloud->m_CloudUnits.at(i)->get_Id()) {
+				std::cout << "showing info about: " << cloud->m_CloudUnits.at(i)->get_Name() <<
+					std::endl << cloud->m_CloudUnits.at(i)->get_Info();
+			}
+		}
+		break;
+	}
 	}
 }
 
-void Execute::PrintCow() {
-	std::cout << "          (__)\n"
-		<< "          (oo)\n"
-		<< "   /-------\\/ \n"
-		<< "  / |     ||\n"
-		<< " *  ||----||  \n"
-		<< "    ^^    ^^ \n";
-}
 void Execute::ListAllCommands() {
 	for (int i = 0; i < m_Commands.size(); i++) {
 		std::cout << m_Commands.at(i)->get_Command() << " -- ";
@@ -91,4 +126,28 @@ void Execute::ExitProgram() {
 
 int Execute::get_ExecutedCommands() {
 	return m_ExecutedCommands;
+}
+
+void Execute::SplitCommand(std::string argCommand) {
+	std::string command;
+	std::string unitId;
+	bool containingSpace = false;
+	for (int i = 0; i < argCommand.size(); i++) {
+		if (argCommand.at(i) == ' ') {
+			containingSpace = true;
+		}
+
+	}
+	if (containingSpace) {
+		std::stringstream split(argCommand);
+		getline(split, command, ' ');
+		getline(split, unitId, ' ');
+
+		m_argCommand = command;
+		m_argUnitId = unitId;
+	}
+	else {
+		m_argCommand = argCommand;
+		m_argUnitId = "not used";
+	}
 }

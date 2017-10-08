@@ -26,4 +26,5 @@ private:
 	std::string m_Info;
 	bool m_Status;
 	int m_Id;
+	
 };

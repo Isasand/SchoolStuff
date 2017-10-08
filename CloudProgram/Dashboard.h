@@ -22,5 +22,6 @@ public:
 	void ShowUnits(Cloud* cloud);
 	void PrintRow();
 	void PrintTitleBar();
+	std::string PrintUnitStatus(Unit* unit);
 };
 
