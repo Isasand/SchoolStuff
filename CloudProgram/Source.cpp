@@ -1,65 +1,26 @@
 #include <iostream>
 #include "Cloud.h"
 #include "Unit.h"
-
+#include "Dashboard.h"
+#include "Execute.h"
+#include "Command.h"
 
 int main() {
-
 	Cloud *cloud = new Cloud();
-	int menuChoice = 0;
+	Dashboard *dashboard = new Dashboard();
+	std::string command;
 	while (true) {
 		ClearScreenFunction();
-		menuChoice = cloud->StartMenu();
+		cloud->Welcome();
+		dashboard->ShowUnits(cloud);
+		std::cout << "Input command: ";
+		getline(std::cin, command);
 
-		switch (menuChoice) {
-
-		case 1: { //show connected units
-			cloud->ListUnits();
-			std::cin.get();
-			std::cout << "OK<ENTER>";
-			std::cin.get();
-			break;
+		Execute *execute = new Execute(command, cloud);
+		if (execute->get_ExecutedCommands() == 0) {
+			std::cout << "Input a valid command";
 		}
-
-		case 2: {// add unit
-			Unit *unit = new Unit();
-			cloud->FillNewUnit(unit);
-			cloud->AddUnit(unit);
-			std::cout << "OK<ENTER>";
-			std::cin.get();
-			std::cin.get();
-			break;
-		}
-		case 3: {//remove unit
-			if (cloud->get_NumberOfUnits() == 0) {
-				std::cout << "No units to remove";
-				SleepFunction(1000);
-				break;
-			}
-			cloud->ListUnits();
-			int unitId = cloud->ChooseUnitById();
-			cloud->RemoveUnit(unitId);
-			break;
-		}
-		case 4: { //show dashboard
-			break;
-		}
-
-		case 5: { //exit
-			std::cout << "Closing program";
-			SleepFunction(300);
-			ClearScreenFunction();
-			exit(0);
-			break;
-		}
-
-		default: {
-			std::cout << "Wrong input, try again!";
-			SleepFunction(400);
-			ClearScreenFunction();
-			break;
-		}
-		}
+		std::cin.get();
 	}
 	return 0;
 }
