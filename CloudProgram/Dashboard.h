@@ -23,5 +23,6 @@ public:
 	void PrintRow();
 	void PrintTitleBar();
 	std::string PrintUnitStatus(Unit* unit);
+
 };
 

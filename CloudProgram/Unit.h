@@ -20,7 +20,7 @@ public:
 	void set_Id(int);
 	bool get_Status();
 	void set_Status(bool);
-
+	void FlipStatus();
 private:
 	std::string m_Name;
 	std::string m_Info;

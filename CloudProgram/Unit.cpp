@@ -39,3 +39,7 @@ bool Unit::get_Status() {
 void Unit::set_Status(bool status) {
 	m_Status = status;
 };
+
+void Unit::FlipStatus() {
+	m_Status = !m_Status;
+}

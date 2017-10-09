@@ -29,7 +29,6 @@ Execute::Execute(std::string argCommand, Cloud* cloud)
 			}
 		}
 		catch (...) {
-			//validId = false;
 		}
 	}
 
@@ -62,7 +61,7 @@ void Execute::LoadCommands() {
 	this->m_Commands.push_back(exit);
 	this->m_Commands.push_back(remove);
 	this->m_Commands.push_back(modify);
-	this->m_Commands.push_back(addunit);
+	/*this->*/m_Commands.push_back(addunit);
 	this->m_Commands.push_back(search);
 	this->m_Commands.push_back(changestate);
 	this->m_Commands.push_back(showinfo);
@@ -86,16 +85,24 @@ void Execute::Run(int commandId, Cloud* cloud) {
 	case 4: {
 		break;
 	}
-	case 5: {
+	case 5: { //add unit 
 		Unit *newUnit = new Unit();
 		newUnit = Dashboard::FillNewUnit();
 		Dashboard::AddUnit(newUnit, m_Cloud);
 		break;
 	}
 	case 6: {
+		//search
 		break;
 	}
-	case 7: {
+	case 7: {//change state
+		for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
+			int id = std::stoi(m_argUnitId);
+			if (id == cloud->m_CloudUnits.at(i)->get_Id()) {
+				cloud->m_CloudUnits.at(i)->FlipStatus();
+				std::cout << "status successfully changed\nOK<ENTER>";
+			}
+		}
 
 		break;
 

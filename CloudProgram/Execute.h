@@ -21,7 +21,6 @@ public:
 	void LoadCommands();
 	void ExitProgram();
 	int get_ExecutedCommands();
-	void PrintCow();
 	void SplitCommand(std::string argcommand);
 
 protected:
