@@ -15,7 +15,7 @@ public:
 	static void AddUnit(Unit* newUnit, Cloud* cloud);
 	static void RemoveUnit(int UnitID, Cloud* cloud);
 	void RemoveAllUnits(Cloud* cloud);
-	void ListUnits(std::vector<Unit*> units);
+	void ListUnits(Cloud* cloud);
 	static Unit *FillNewUnit();
 	int ChooseUnitById();
 	void ShowUnits(Cloud* cloud);

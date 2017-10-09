@@ -4,25 +4,19 @@
 Execute::Execute(std::string argCommand, Cloud* cloud)
 {
 
-
-	//validId används ifall du matat in ett kommando där du vill göra något med en särsild unit, är inte IDt rätt är den false
 	bool validId = false;
-	//lägg in cloud som aktiv medlem i Execute
+	
 	m_ActiveCloud = cloud;
-	//executed commands nollställs
+	
 	m_ExecutedCommands = 0;
-	//loadcommands laddar in alla kommandon
 	LoadCommands();
-
-	//om det finns ett mellanslag i kommandot kollas det här
 	SplitCommand(argCommand);
-
-	//om det inte finns mellanslag är argUnitId == Not used och vi matchar mot kommandot
+	
 	if (m_argUnitId == "not used") {
 		for (int i = 0; i < get_NumberOfCommands(); i++) {
 			if (getCommandAt(i)->get_Command() == m_argCommand) {
-				//när ett kommando matchar körs Run()-funktionen med IDt på kommandot som matchat
-				Run(getCommandAt(i)->m_Id);
+				//när ett kommando matchar körs Run()-funktionen med IDt 
+				Run(getCommandAt(i)->get_Id());
 				m_ExecutedCommands++;
 			}
 		}
@@ -80,20 +74,46 @@ void Execute::LoadCommands() {
 	AddCommandToExecute(showinfo);
 }
 
+
+//Splittar ett kommando om det är mellanslag 
+void Execute::SplitCommand(std::string argCommand) {
+	std::string command;
+	std::string unitId;
+	bool containingSpace = false;
+	for (int i = 0; i < argCommand.size(); i++) {
+		if (argCommand.at(i) == ' ') {
+			containingSpace = true;
+		}
+
+	}
+	if (containingSpace) {
+		std::stringstream split(argCommand);
+		getline(split, command, ' ');
+		getline(split, unitId, ' ');
+
+		m_argCommand = command;
+		m_argUnitId = unitId;
+	}
+	else {
+		m_argCommand = argCommand;
+		m_argUnitId = "not used";
+	}
+}
 //kör funktion kopplat till IDt som matchat med kommandot
 void Execute::Run(int commandId) {
 	switch (commandId) {
 
 	case 1: {//kommando som är bundet = 'help'
 		ListAllCommands();
+		std::cout << "OK<ENTER>";
 		break;
 	}
-	case 2: { //exit cloud 'exitä
+	case 2: { //exit cloud 'exit'
 		Cloud::ExitCloud();
 		break;
 	}
 
-	case 3: {//Remove unit TODO: flytta hit funktionen från dashboard
+	case 3: {
 		if (m_ActiveCloud->get_NumberOfUnits() != 0) {
 			int id = std::stoi(m_argUnitId);
 			Dashboard::RemoveUnit(id, m_ActiveCloud);
@@ -141,6 +161,7 @@ void Execute::Run(int commandId) {
 		}
 		break;
 	}
+			//TODO: funktion för aktiva eheter
 	}
 }
 //'help'-kommandot triggar denna
@@ -152,38 +173,13 @@ void Execute::ListAllCommands() {
 }
 
 //en exit-funktion för att stänga av programmet, vi använder den som ligger i cloud istället :) 
-void Execute::ExitProgram() {
+/*void Execute::ExitProgram() {
 	exit(0);
-}
+}*/
 
 //hämtar hur många kommandon som körts
 int Execute::get_ExecutedCommands() {
 	return m_ExecutedCommands;
-}
-
-//Splittar ett kommando om det är mellanslag 
-void Execute::SplitCommand(std::string argCommand) {
-	std::string command;
-	std::string unitId;
-	bool containingSpace = false;
-	for (int i = 0; i < argCommand.size(); i++) {
-		if (argCommand.at(i) == ' ') {
-			containingSpace = true;
-		}
-
-	}
-	if (containingSpace) {
-		std::stringstream split(argCommand);
-		getline(split, command, ' ');
-		getline(split, unitId, ' ');
-
-		m_argCommand = command;
-		m_argUnitId = unitId;
-	}
-	else {
-		m_argCommand = argCommand;
-		m_argUnitId = "not used";
-	}
 }
 
 int Execute::get_NumberOfCommands() {

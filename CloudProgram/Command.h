@@ -4,8 +4,6 @@
 
 class Command {
 
-	friend class Execute;
-
 public:
 
 	Command(std::string argInfo, std::string argCommand, int argID);

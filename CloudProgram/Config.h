@@ -1,9 +1,9 @@
 #pragma once
 
 //if on  unix, change to false 
-#define USING_VISUAL_STUDIO true;
+#define USING_WINDOWS true;
 
-#if USING_VISUAL_STUDIO 
+#if USING_WINDOWS
 
 void SleepFunction(int milliseconds);
 void ClearScreenFunction();

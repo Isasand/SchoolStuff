@@ -13,13 +13,11 @@ class Execute
 public:
 	Execute(std::string argCommand, Cloud* cloud);
 	~Execute();
-	//denna pekare ska jag nog ta bort sen
-	Execute *p = this;
 
 	void Run(int commandId);
 	void ListAllCommands();
 	void LoadCommands();
-	void ExitProgram();
+	//void ExitProgram();
 	int get_ExecutedCommands();
 	void SplitCommand(std::string argcommand);
 	int get_NumberOfCommands();

@@ -2,7 +2,7 @@
 
 #include "Config.h"
 
-#if USING_VISUAL_STUDIO 
+#if USING_WINDOWS
 #include <Windows.h>
 
 void SleepFunction(int milliseconds){
