@@ -1,41 +1,53 @@
 #include "Execute.h"
 
-
+//konstruktor som tar en kommandosträng och ett cloud
 Execute::Execute(std::string argCommand, Cloud* cloud)
 {
+
+
+	//validId används ifall du matat in ett kommando där du vill göra något med en särsild unit, är inte IDt rätt är den false
 	bool validId = false;
-	m_Cloud = cloud;
+	//lägg in cloud som aktiv medlem i Execute
+	m_ActiveCloud = cloud;
+	//executed commands nollställs
 	m_ExecutedCommands = 0;
+	//loadcommands laddar in alla kommandon
 	LoadCommands();
 
+	//om det finns ett mellanslag i kommandot kollas det här
 	SplitCommand(argCommand);
 
+	//om det inte finns mellanslag är argUnitId == Not used och vi matchar mot kommandot
 	if (m_argUnitId == "not used") {
-		for (int i = 0; i < m_Commands.size(); i++) {
-			if (m_Commands.at(i)->get_Command() == m_argCommand) {
-				Run(m_Commands.at(i)->m_Id, cloud);
+		for (int i = 0; i < get_NumberOfCommands(); i++) {
+			if (getCommandAt(i)->get_Command() == m_argCommand) {
+				//när ett kommando matchar körs Run()-funktionen med IDt på kommandot som matchat
+				Run(getCommandAt(i)->m_Id);
 				m_ExecutedCommands++;
 			}
 		}
 	}
 
+	//om mellanslag finns, testa gör om m_argUnitId till en int att använda för ID 
 	else {
 		try {
 			int id = std::stoi(m_argUnitId);
-			for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
-				if (cloud->m_CloudUnits.at(i)->get_Id() == id) {
+			for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
+				if (m_ActiveCloud->getUnitAt(i)->get_Id() == id) {
 					validId = true;
 				}
 			}
 		}
+		//är det annat än siffror där så hamnar vi här och gör ingenting 
 		catch (...) {
 		}
 	}
 
+	//om mellanslag finns och IDt matchar mot ett ID körs rätt kommando
 	if (validId) {
-		for (int i = 0; i < m_Commands.size(); i++) {
-			if (m_Commands.at(i)->get_Command() == m_argCommand) {
-				Run(m_Commands.at(i)->m_Id, cloud);
+		for (int i = 0; i < get_NumberOfCommands(); i++) {
+			if (getCommandAt(i)->get_Command() == m_argCommand) {
+				Run(getCommandAt(i)->get_Id());
 				m_ExecutedCommands++;
 			}
 		}
@@ -47,6 +59,7 @@ Execute::~Execute()
 {
 }
 
+//laddar in alla kommandon i Execute
 void Execute::LoadCommands() {
 	Command *help = new Command("Lists all command and what they do", "help", 1);
 	Command *exit = new Command("Exits program", "exit", 2);
@@ -57,69 +70,80 @@ void Execute::LoadCommands() {
 	Command *changestate = new Command("Change state of unit, input 'changestate <unit ID>'", "changestate", 7);
 	Command *showinfo = new Command("Show info about unit, input 'showinfo <unit ID>'", "showinfo", 8);
 
-	this->m_Commands.push_back(help);
-	this->m_Commands.push_back(exit);
-	this->m_Commands.push_back(remove);
-	this->m_Commands.push_back(modify);
-	/*this->*/m_Commands.push_back(addunit);
-	this->m_Commands.push_back(search);
-	this->m_Commands.push_back(changestate);
-	this->m_Commands.push_back(showinfo);
+	AddCommandToExecute(help);
+	AddCommandToExecute(exit);
+	AddCommandToExecute(remove);
+	AddCommandToExecute(modify);
+	AddCommandToExecute(addunit);
+	AddCommandToExecute(search);
+	AddCommandToExecute(changestate);
+	AddCommandToExecute(showinfo);
 }
 
-void Execute::Run(int commandId, Cloud* cloud) {
+//kör funktion kopplat till IDt som matchat med kommandot
+void Execute::Run(int commandId) {
 	switch (commandId) {
 
-	case 1: {
+	case 1: {//kommando som är bundet = 'help'
 		ListAllCommands();
 		break;
 	}
-	case 2: {
+	case 2: { //exit cloud 'exitä
 		Cloud::ExitCloud();
 		break;
 	}
-	case 3: {//Remove
+
+	case 3: {//Remove unit TODO: flytta hit funktionen från dashboard
+		if (m_ActiveCloud->get_NumberOfUnits() != 0) {
+			int id = std::stoi(m_argUnitId);
+			Dashboard::RemoveUnit(id, m_ActiveCloud);
+		}
+		break;
+	}
+
+	case 4: {// modify unit TODO: lägg in funktion 
 
 		break;
 	}
-	case 4: {
-		break;
-	}
+
 	case 5: { //add unit 
 		Unit *newUnit = new Unit();
 		newUnit = Dashboard::FillNewUnit();
-		Dashboard::AddUnit(newUnit, m_Cloud);
+		Dashboard::AddUnit(newUnit, m_ActiveCloud);
 		break;
 	}
+
 	case 6: {
 		//search
 		break;
 	}
-	case 7: {//change state
-		for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
+
+	case 7: {//change state on unit
+		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
 			int id = std::stoi(m_argUnitId);
-			if (id == cloud->m_CloudUnits.at(i)->get_Id()) {
-				cloud->m_CloudUnits.at(i)->FlipStatus();
+			if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+				//Flipstatus är en funktion som ändrar ID på unit till det den inte var innan 
+				m_ActiveCloud->getUnitAt(i)->FlipStatus();
 				std::cout << "status successfully changed\nOK<ENTER>";
 			}
 		}
-
+	
 		break;
 
 	}
-	case 8: { //show info
-		for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
+	case 8: { //show info unit
+		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
 			int id = std::stoi(m_argUnitId);
-			if (id == cloud->m_CloudUnits.at(i)->get_Id()) {
-				std::cout << "showing info about: " << cloud->m_CloudUnits.at(i)->get_Name() <<
-					std::endl << cloud->m_CloudUnits.at(i)->get_Info();
+			if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+				std::cout << "showing info about: " << m_ActiveCloud->getUnitAt(i)->get_Name() <<
+					std::endl << m_ActiveCloud->getUnitAt(i)->get_Info();
 			}
 		}
 		break;
 	}
 	}
 }
-
+//'help'-kommandot triggar denna
 void Execute::ListAllCommands() {
 	for (int i = 0; i < m_Commands.size(); i++) {
 		std::cout << m_Commands.at(i)->get_Command() << " -- ";
@@ -127,14 +151,17 @@ void Execute::ListAllCommands() {
 	}
 }
 
+//en exit-funktion för att stänga av programmet, vi använder den som ligger i cloud istället :) 
 void Execute::ExitProgram() {
 	exit(0);
 }
 
+//hämtar hur många kommandon som körts
 int Execute::get_ExecutedCommands() {
 	return m_ExecutedCommands;
 }
 
+//Splittar ett kommando om det är mellanslag 
 void Execute::SplitCommand(std::string argCommand) {
 	std::string command;
 	std::string unitId;
@@ -157,4 +184,16 @@ void Execute::SplitCommand(std::string argCommand) {
 		m_argCommand = argCommand;
 		m_argUnitId = "not used";
 	}
+}
+
+int Execute::get_NumberOfCommands() {
+	return m_Commands.size();
+}
+
+Command* Execute::getCommandAt(int index) {
+	return m_Commands.at(index);
+}
+
+void Execute::AddCommandToExecute(Command* command) {
+	m_Commands.push_back(command);
 }

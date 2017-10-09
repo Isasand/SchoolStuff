@@ -7,14 +7,13 @@
 
 class Dashboard
 {
-	friend class Execute;
 
 public:
 	Dashboard();
 	~Dashboard();
 
 	static void AddUnit(Unit* newUnit, Cloud* cloud);
-	void RemoveUnit(int UnitID, Cloud* cloud);
+	static void RemoveUnit(int UnitID, Cloud* cloud);
 	void RemoveAllUnits(Cloud* cloud);
 	void ListUnits(std::vector<Unit*> units);
 	static Unit *FillNewUnit();

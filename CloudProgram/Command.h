@@ -10,7 +10,7 @@ public:
 
 	Command(std::string argInfo, std::string argCommand, int argID);
 	~Command();
-
+	
 	std::string get_Command();
 	std::string get_Info();
 	int get_Id();

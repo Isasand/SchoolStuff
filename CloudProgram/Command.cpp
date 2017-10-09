@@ -1,11 +1,11 @@
 #include "Command.h"
 
+//konstruktor som tar info, command och id
 Command::Command(std::string argInfo, std::string argCommand, int argID)
 {
 	m_Info = argInfo;
 	m_Command = argCommand;
 	m_Id = argID;
-
 }
 
 Command::~Command()

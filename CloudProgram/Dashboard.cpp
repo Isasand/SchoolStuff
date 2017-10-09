@@ -12,7 +12,7 @@ Dashboard::~Dashboard()
 }
 
 void Dashboard::AddUnit(Unit* newUnit, Cloud* cloud) {
-	cloud->m_CloudUnits.push_back(newUnit);
+	cloud->AddUnitToCloud(newUnit);
 	cloud->AddedUnit();
 }
 
@@ -21,18 +21,18 @@ void Dashboard::RemoveAllUnits(Cloud* cloud) {
 	std::cout << "**Are you sure you want to remove all units (y/n)?**";
 	std::cin.get(sure);
 	if ((sure == 'y') || (sure == 'Y')) {
-		cloud->m_CloudUnits.clear();
+		cloud->ClearListOfUnits();
 		std::cout << "All units successfully removed";
 	}
 }
-void Dashboard::ListUnits(std::vector<Unit*> units) {
+/*void Dashboard::ListUnits(std::vector<Unit*> units) {
 	for (int i = 0; i <units.size(); i++) {
 		std::cout << units[i]->get_Name() << " - ";
 		std::cout << "ID: " << units[i]->get_Id() << std::endl;
 	}
-}
+}*/
 
-int Dashboard::ChooseUnitById() {
+/*int Dashboard::ChooseUnitById() {
 	int unitId = 0;
 	std::cout << "Choose unit by ID : ";
 	std::cin >> unitId;
@@ -45,19 +45,19 @@ int Dashboard::ChooseUnitById() {
 		return 0;
 	}
 	return unitId;
-}
+}*/
 
 void Dashboard::RemoveUnit(int unitId, Cloud* cloud) {
 	int foundAndErased = 0;
 	if (unitId != 0) {
 
-		for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
-			if (unitId == cloud->m_CloudUnits[i]->get_Id()) {
-				int temp = cloud->m_CloudUnits[i]->get_Id();
-				cloud->m_CloudUnits.erase(cloud->m_CloudUnits.begin() + i);
+		for (int i = 0; i < cloud->get_NumberOfUnits(); i++) {
+			if (unitId == cloud->getUnitAt(i)->get_Id()) {
+				int temp = cloud->getUnitAt(i)->get_Id();
+				cloud->RemoveUnitAt(i);
 				std::cout << "Unit with ID " << temp << " has been successfully erased";
 				foundAndErased++;
-				cloud->m_NumberOfUnits--;
+				cloud->RemovedUnit();
 			}
 		}
 
@@ -68,8 +68,6 @@ void Dashboard::RemoveUnit(int unitId, Cloud* cloud) {
 	}
 
 	std::cout << "\nOK<ENTER>";
-	std::cin.get();
-	std::cin.get();
 }
 
 Unit* Dashboard::FillNewUnit() {
@@ -78,6 +76,7 @@ Unit* Dashboard::FillNewUnit() {
 	std::string setInfo;
 	int setId;
 
+	std::cin.clear();
 	std::cout << "Name of new unit?" << std::endl;
 	getline(std::cin, setName);
 	tempUnit->set_Name(setName);
@@ -101,23 +100,24 @@ Unit* Dashboard::FillNewUnit() {
 }
 
 void Dashboard::ShowUnits(Cloud* cloud) {
+	std::cout << "\t***DASHBOARD***\n";
 	PrintRow();
 	PrintTitleBar();
 	PrintRow();
-	for (int i = 0; i < cloud->m_CloudUnits.size(); i++) {
-		int nameLenght = cloud->m_CloudUnits.at(i)->get_Name().size();
-		std::cout << "|" << cloud->m_CloudUnits.at(i)->get_Name()
+	for (int i = 0; i < cloud->get_NumberOfUnits(); i++) {
+		int nameLenght = cloud->getUnitAt(i)->get_Name().size();
+		std::cout << "|" << cloud->getUnitAt(i)->get_Name()
 			<< std::setw(21 - nameLenght) << std::setfill(' ') << " |";
 
-		int id = cloud->m_CloudUnits.at(i)->get_Id();
+		int id = cloud->getUnitAt(i)->get_Id();
 		std::string str;
 		std::stringstream convertToString;
 		convertToString << id;
 		str = convertToString.str();
 
-		std::cout << cloud->m_CloudUnits.at(i)->get_Id()
+		std::cout << cloud->getUnitAt(i)->get_Id()
 			<< std::setw(5 - str.size()) << std::setfill(' ') << "|" ;
-		std::cout << PrintUnitStatus(cloud->m_CloudUnits.at(i)) << std::setw(4) << std::setfill(' ') << " |" << std::endl;
+		std::cout << PrintUnitStatus(cloud->getUnitAt(i)) << std::setw(4) << std::setfill(' ') << " |" << std::endl;
 		PrintRow();
 	}
 	std::cout << std::endl;
