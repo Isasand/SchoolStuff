@@ -19,7 +19,8 @@ std::string Unit::get_Name() {
 	return m_Name;
 };
 void Unit::set_Name(std::string name) {
-	m_Name = name;
+		m_Name = name;
+	
 };
 std::string Unit::get_Info() {
 	return m_Info;

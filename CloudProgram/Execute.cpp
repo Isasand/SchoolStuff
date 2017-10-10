@@ -58,9 +58,7 @@ void Execute::LoadCommands() {
 	Command *help = new Command("Lists all command and what they do", "help", 1);
 	Command *exit = new Command("Exits program", "exit", 2);
 	Command *remove = new Command("Deletes unit with chosen ID, input 'remove <unit ID>'", "remove", 3);
-	//Command *modify = new Command("For modifying information of unit with chosen ID, input 'modify <unit ID>'", "modify", 4);
 	Command *addunit = new Command("Add a unit to cloud", "addunit", 5);
-	//Command *search = new Command("Search unit by ID, input 'search <unit ID>'", "search", 6);
 	Command *changestate = new Command("Change state of unit, input 'changestate <unit ID>'", "changestate", 7);
 	Command *showinfo = new Command("Show info about unit, input 'showinfo <unit ID>'", "showinfo", 8);
 	Command *showactive = new Command("Prints active units", "showactive", 9);
@@ -70,7 +68,6 @@ void Execute::LoadCommands() {
 	AddCommandToExecute(help);
 	AddCommandToExecute(exit);
 	AddCommandToExecute(remove);
-	
 	AddCommandToExecute(addunit);
 	AddCommandToExecute(changestate);
 	AddCommandToExecute(showinfo);

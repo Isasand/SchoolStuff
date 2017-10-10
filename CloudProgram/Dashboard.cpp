@@ -53,12 +53,22 @@ Unit* Dashboard::FillNewUnit() {
 	Unit *tempUnit = new Unit();
 	std::string setName;
 	std::string setInfo;
-	//int setId;
 
 	std::cin.clear();
 	std::cout << "Name of new unit?" << std::endl;
 	getline(std::cin, setName);
-	tempUnit->set_Name(setName);
+	if (setName.size() < MAX_NAME_LENGHT) {
+		tempUnit->set_Name(setName);
+	}
+	else{
+		std::cout << "Max lenght of name is: " << MAX_NAME_LENGHT << "\n";
+		while (setName.size() > MAX_NAME_LENGHT) {
+			std::cout << "Input new name: ";
+			getline(std::cin, setName);
+		}
+		tempUnit->set_Name(setName);
+	}
+
 	std::cin.clear();
 	std::cout << "Info of new unit?" << std::endl;
 	getline(std::cin, setInfo);
@@ -86,7 +96,7 @@ void Dashboard::ShowUnits(Cloud* cloud) {
 	for (int i = 0; i < cloud->get_NumberOfUnits(); i++) {
 		int nameLenght = cloud->getUnitAt(i)->get_Name().size();
 		std::cout << "|" << cloud->getUnitAt(i)->get_Name()
-			<< std::setw(21 - nameLenght) << std::setfill(' ') << " |";
+			<< std::setw(MAX_NAME_LENGHT +1 - nameLenght) << std::setfill(' ') << " |";
 
 		int id = cloud->getUnitAt(i)->get_Id();
 		std::string str;
@@ -104,12 +114,12 @@ void Dashboard::ShowUnits(Cloud* cloud) {
 }
 
 void Dashboard::PrintRow() {
-	std::cout << "+" << std::setfill('-') << std::setw(33);
+	std::cout << "+" << std::setfill('-') << std::setw(MAX_NAME_LENGHT + 13);
 	std::cout<< "+----+-----+\n";
 	
 }
 void Dashboard::PrintTitleBar() {
-	std::cout << "|UNIT                |ID  |STATE|\n";
+	std::cout << "|UNIT"<< std::setw(MAX_NAME_LENGHT +9) << std::setfill(' ')	<< "|ID  |STATE|\n";
 }
 
 std::string Dashboard::PrintUnitStatus(Unit* unit) {
@@ -141,7 +151,6 @@ void Dashboard::ChangeUnitInfo(Unit* unit) {
 
 Unit* Dashboard::GenerateId(Cloud* cloud, Unit* newUnit){
 	int largestId = 0;
-
 	if (cloud->get_NumberOfUnits() != 0) {
 		largestId = cloud->getUnitAt(cloud->get_NumberOfUnits()-1)->get_Id();
 	}

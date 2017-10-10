@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_NAME_LENGHT 20
+
 #include <stdio.h>
 #include <iostream>
 #include <vector>
