@@ -19,6 +19,7 @@ public:
 	void RemovedUnit();
 	void AddUnitToCloud(Unit* newUnit);
 	void ClearListOfUnits();
+
 protected: 
 	std::vector<Unit*> m_CloudUnits;
 	int m_NumberOfUnits;

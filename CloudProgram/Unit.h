@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+
 enum class status {
 	ON,
 	OFF
@@ -14,8 +15,6 @@ public:
 	Unit();
 	Unit(std::string, std::string, status, int);
 	~Unit();
-
-	
 
 	std::string get_Name();
 	void set_Name(std::string);

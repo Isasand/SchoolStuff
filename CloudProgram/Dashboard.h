@@ -28,8 +28,9 @@ public:
 	static void Dashboard::ShowActiveUnits(Cloud* cloud);
 	static void Dashboard::ChangeUnitName(Unit* unit);
 	static void Dashboard::ChangeUnitInfo(Unit* unit);
+	static Unit* GenerateId(Cloud* cloud, Unit* newUnit);
 
 protected:
-	Cloud* m_Cloud;
+	Cloud* m_ActiveCloud;
 };
 

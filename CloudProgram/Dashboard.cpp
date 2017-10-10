@@ -53,7 +53,7 @@ Unit* Dashboard::FillNewUnit() {
 	Unit *tempUnit = new Unit();
 	std::string setName;
 	std::string setInfo;
-	int setId;
+	//int setId;
 
 	std::cin.clear();
 	std::cout << "Name of new unit?" << std::endl;
@@ -71,9 +71,9 @@ Unit* Dashboard::FillNewUnit() {
 		tempUnit->set_Status(status::ON);
 	}
 
-	std::cout << "ID number of new unit?" << std::endl;
-	std::cin >> setId;
-	tempUnit->set_Id(setId);
+	/*std::cout << "ID number of new unit?" << std::endl;
+	std::cin >> setId;*/
+	//tempUnit->set_Id(Dashboard::GenerateId(m_ActiveCloud));
 
 	return tempUnit;
 }
@@ -137,4 +137,16 @@ void Dashboard::ChangeUnitInfo(Unit* unit) {
 	getline(std::cin, info);
 	unit->set_Info(info);
 	std::cout << "OK<ENTER>";
+}
+
+Unit* Dashboard::GenerateId(Cloud* cloud, Unit* newUnit){
+	int largestId = 0;
+
+	if (cloud->get_NumberOfUnits() != 0) {
+		largestId = cloud->getUnitAt(cloud->get_NumberOfUnits()-1)->get_Id();
+	}
+
+	int generatedId = largestId+=1;
+	newUnit->set_Id(generatedId);
+	return newUnit;
 }

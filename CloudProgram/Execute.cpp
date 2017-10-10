@@ -58,9 +58,9 @@ void Execute::LoadCommands() {
 	Command *help = new Command("Lists all command and what they do", "help", 1);
 	Command *exit = new Command("Exits program", "exit", 2);
 	Command *remove = new Command("Deletes unit with chosen ID, input 'remove <unit ID>'", "remove", 3);
-	Command *modify = new Command("For modifying information of unit with chosen ID, input 'modify <unit ID>'", "modify", 4);
+	//Command *modify = new Command("For modifying information of unit with chosen ID, input 'modify <unit ID>'", "modify", 4);
 	Command *addunit = new Command("Add a unit to cloud", "addunit", 5);
-	Command *search = new Command("Search unit by ID, input 'search <unit ID>'", "search", 6);
+	//Command *search = new Command("Search unit by ID, input 'search <unit ID>'", "search", 6);
 	Command *changestate = new Command("Change state of unit, input 'changestate <unit ID>'", "changestate", 7);
 	Command *showinfo = new Command("Show info about unit, input 'showinfo <unit ID>'", "showinfo", 8);
 	Command *showactive = new Command("Prints active units", "showactive", 9);
@@ -70,9 +70,8 @@ void Execute::LoadCommands() {
 	AddCommandToExecute(help);
 	AddCommandToExecute(exit);
 	AddCommandToExecute(remove);
-	AddCommandToExecute(modify);
+	
 	AddCommandToExecute(addunit);
-	AddCommandToExecute(search);
 	AddCommandToExecute(changestate);
 	AddCommandToExecute(showinfo);
 	AddCommandToExecute(showactive);
@@ -105,6 +104,7 @@ void Execute::SplitCommand(std::string argCommand) {
 		m_argUnitId = "not used";
 	}
 }
+
 //kör funktion kopplat till IDt som matchat med kommandot
 void Execute::Run(int commandId) {
 	switch (commandId) {
@@ -127,22 +127,23 @@ void Execute::Run(int commandId) {
 		break;
 	}
 
-	case 4: {// modify unit TODO: lägg in funktion 
+	/*case 4: {// modify unit TODO: lägg in funktion 
 
 		break;
-	}
+	}*/
 
 	case 5: { //add unit 
 		Unit *newUnit = new Unit();
 		newUnit = Dashboard::FillNewUnit();
+		Dashboard::GenerateId(m_ActiveCloud, newUnit);
 		Dashboard::AddUnit(newUnit, m_ActiveCloud);
 		break;
 	}
 
-	case 6: {
+	/*case 6: {
 		//search
 		break;
-	}
+	}*/
 
 	case 7: {//change state on unit
 		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
@@ -155,7 +156,6 @@ void Execute::Run(int commandId) {
 				}
 			}
 			catch (...) {
-
 			}
 		}
 
@@ -172,7 +172,6 @@ void Execute::Run(int commandId) {
 				}
 			}
 			catch (...) {
-
 			}
 		}
 		break;
