@@ -5,13 +5,13 @@ Execute::Execute(std::string argCommand, Cloud* cloud)
 {
 
 	bool validId = false;
-	
+
 	m_ActiveCloud = cloud;
-	
+
 	m_ExecutedCommands = 0;
 	LoadCommands();
 	SplitCommand(argCommand);
-	
+
 	if (m_argUnitId == "not used") {
 		for (int i = 0; i < get_NumberOfCommands(); i++) {
 			if (getCommandAt(i)->get_Command() == m_argCommand) {
@@ -63,6 +63,9 @@ void Execute::LoadCommands() {
 	Command *search = new Command("Search unit by ID, input 'search <unit ID>'", "search", 6);
 	Command *changestate = new Command("Change state of unit, input 'changestate <unit ID>'", "changestate", 7);
 	Command *showinfo = new Command("Show info about unit, input 'showinfo <unit ID>'", "showinfo", 8);
+	Command *showactive = new Command("Prints active units", "showactive", 9);
+	Command *changename = new Command("Change name of unit, input 'changename <Unit ID>'", "changename", 10);
+	Command *changeinfo = new Command("Changes info of unit, input 'changeinfo <Unit ID>'", "changeinfo", 11);
 
 	AddCommandToExecute(help);
 	AddCommandToExecute(exit);
@@ -72,6 +75,9 @@ void Execute::LoadCommands() {
 	AddCommandToExecute(search);
 	AddCommandToExecute(changestate);
 	AddCommandToExecute(showinfo);
+	AddCommandToExecute(showactive);
+	AddCommandToExecute(changename);
+	AddCommandToExecute(changeinfo);
 }
 
 
@@ -140,28 +146,73 @@ void Execute::Run(int commandId) {
 
 	case 7: {//change state on unit
 		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
-			int id = std::stoi(m_argUnitId);
-			if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
-				//Flipstatus är en funktion som ändrar ID på unit till det den inte var innan 
-				m_ActiveCloud->getUnitAt(i)->FlipStatus();
-				std::cout << "status successfully changed\nOK<ENTER>";
+			try {
+				int id = std::stoi(m_argUnitId);
+				if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+					//Flipstatus är en funktion som ändrar ID på unit till det den inte var innan 
+					m_ActiveCloud->getUnitAt(i)->FlipStatus();
+					std::cout << "status successfully changed\nOK<ENTER>";
+				}
+			}
+			catch (...) {
+
 			}
 		}
-	
+
 		break;
 
 	}
 	case 8: { //show info unit
 		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
-			int id = std::stoi(m_argUnitId);
-			if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
-				std::cout << "showing info about: " << m_ActiveCloud->getUnitAt(i)->get_Name() <<
-					std::endl << m_ActiveCloud->getUnitAt(i)->get_Info();
+			try {
+				int id = std::stoi(m_argUnitId);
+				if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+					std::cout << "showing info about: " << m_ActiveCloud->getUnitAt(i)->get_Name() <<
+						std::endl << m_ActiveCloud->getUnitAt(i)->get_Info();
+				}
+			}
+			catch (...) {
+
 			}
 		}
 		break;
 	}
-			//TODO: funktion för aktiva eheter
+
+	case 9: {
+		Dashboard::ShowActiveUnits(m_ActiveCloud);
+		break; 
+	}
+
+	case 10: {
+		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
+			try {
+				int id = std::stoi(m_argUnitId);
+				if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+					Dashboard::ChangeUnitName(m_ActiveCloud->getUnitAt(i));
+				}
+			}
+			catch (...) {
+
+			}
+		}
+
+		break;
+	}
+	case 11: {
+		for (int i = 0; i < m_ActiveCloud->get_NumberOfUnits(); i++) {
+			try {
+				int id = std::stoi(m_argUnitId);
+				if (id == m_ActiveCloud->getUnitAt(i)->get_Id()) {
+					Dashboard::ChangeUnitInfo(m_ActiveCloud->getUnitAt(i));
+				}
+			}
+			catch (...) {
+
+			}
+		}
+
+		break;
+	}
 	}
 }
 //'help'-kommandot triggar denna
@@ -171,11 +222,6 @@ void Execute::ListAllCommands() {
 		std::cout << m_Commands.at(i)->get_Info() << "\n";
 	}
 }
-
-//en exit-funktion för att stänga av programmet, vi använder den som ligger i cloud istället :) 
-/*void Execute::ExitProgram() {
-	exit(0);
-}*/
 
 //hämtar hur många kommandon som körts
 int Execute::get_ExecutedCommands() {

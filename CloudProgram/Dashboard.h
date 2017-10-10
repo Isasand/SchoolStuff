@@ -24,6 +24,10 @@ public:
 	void PrintRow();
 	void PrintTitleBar();
 	std::string PrintUnitStatus(Unit* unit);
+	void ShowActiveUnits();
+	static void Dashboard::ShowActiveUnits(Cloud* cloud);
+	static void Dashboard::ChangeUnitName(Unit* unit);
+	static void Dashboard::ChangeUnitInfo(Unit* unit);
 
 protected:
 	Cloud* m_Cloud;
