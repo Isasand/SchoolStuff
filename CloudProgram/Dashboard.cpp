@@ -89,7 +89,7 @@ Unit* Dashboard::FillNewUnit() {
 	std::cout << "Activate new unit (Y/n)?" << std::endl;
 	std::cin.get(activate);
 	if ((activate == 'Y') || (activate == 'y') || (activate == '\n')) {
-		tempUnit->set_Status(true);
+		tempUnit->set_Status(status::ON);
 	}
 
 	std::cout << "ID number of new unit?" << std::endl;
@@ -117,7 +117,7 @@ void Dashboard::ShowUnits(Cloud* cloud) {
 
 		std::cout << cloud->getUnitAt(i)->get_Id()
 			<< std::setw(5 - str.size()) << std::setfill(' ') << "|" ;
-		std::cout << PrintUnitStatus(cloud->getUnitAt(i)) << std::setw(4) << std::setfill(' ') << " |" << std::endl;
+		std::cout <<PrintUnitStatus(cloud->getUnitAt(i))<< std::setw(4) << std::setfill(' ') << " |" << std::endl;
 		PrintRow();
 	}
 	std::cout << std::endl;
@@ -134,5 +134,5 @@ void Dashboard::PrintTitleBar() {
 }
 
 std::string Dashboard::PrintUnitStatus(Unit* unit) {
-	return unit->get_Status() ? "ON" : "X ";
+	return unit->get_Status() == status::ON ? "ON" : "X ";
 }

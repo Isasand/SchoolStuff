@@ -12,6 +12,8 @@ public:
 	Dashboard();
 	~Dashboard();
 
+	Dashboard *p = this;
+
 	static void AddUnit(Unit* newUnit, Cloud* cloud);
 	static void RemoveUnit(int UnitID, Cloud* cloud);
 	void RemoveAllUnits(Cloud* cloud);
@@ -23,5 +25,7 @@ public:
 	void PrintTitleBar();
 	std::string PrintUnitStatus(Unit* unit);
 
+protected:
+	Cloud* m_Cloud;
 };
 

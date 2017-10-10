@@ -1,10 +1,10 @@
 #include "Unit.h"
 
 Unit::Unit() {
-	m_Status = false;
+	m_Status = status::OFF;
 };
 
-Unit::Unit(std::string name, std::string info, bool status, int id) {
+Unit::Unit(std::string name, std::string info, status status, int id) {
 
 	m_Name = name;
 	m_Info = info;
@@ -33,13 +33,20 @@ int Unit::get_Id() {
 void Unit::set_Id(int id) {
 	m_Id = id;
 };
-bool Unit::get_Status() {
+
+status Unit::get_Status() {
 	return m_Status;
 };
-void Unit::set_Status(bool status) {
+
+void Unit::set_Status(status status) {
 	m_Status = status;
 };
 
 void Unit::FlipStatus() {
-	m_Status = !m_Status;
+	if (m_Status == status::ON) {
+		m_Status = status::OFF;
+	}
+	else {
+		m_Status = status::ON;
+	}
 }
