@@ -1,6 +1,7 @@
 #pragma once
 
 #define MAX_NAME_LENGHT 20
+#define MAX_ID_LENGHT 5
 
 #include <stdio.h>
 #include <iostream>

@@ -6,7 +6,6 @@ Dashboard::Dashboard()
 {
 }
 
-
 Dashboard::~Dashboard()
 {
 }
@@ -81,10 +80,6 @@ Unit* Dashboard::FillNewUnit() {
 		tempUnit->set_Status(status::ON);
 	}
 
-	/*std::cout << "ID number of new unit?" << std::endl;
-	std::cin >> setId;*/
-	//tempUnit->set_Id(Dashboard::GenerateId(m_ActiveCloud));
-
 	return tempUnit;
 }
 
@@ -105,7 +100,7 @@ void Dashboard::ShowUnits(Cloud* cloud) {
 		str = convertToString.str();
 
 		std::cout << cloud->getUnitAt(i)->get_Id()
-			<< std::setw(5 - str.size()) << std::setfill(' ') << "|" ;
+			<< std::setw(MAX_ID_LENGHT - str.size()) << std::setfill(' ') << "|" ;
 		std::cout <<PrintUnitStatus(cloud->getUnitAt(i))<< std::setw(3) << std::setfill(' ') << " |" << std::endl;
 		PrintRow();
 	}
@@ -149,7 +144,7 @@ void Dashboard::ChangeUnitInfo(Unit* unit) {
 	std::cout << "OK<ENTER>";
 }
 
-Unit* Dashboard::GenerateId(Cloud* cloud, Unit* newUnit){
+void Dashboard::GenerateId(Cloud* cloud, Unit* newUnit){
 	int largestId = 0;
 	if (cloud->get_NumberOfUnits() != 0) {
 		largestId = cloud->getUnitAt(cloud->get_NumberOfUnits()-1)->get_Id();
@@ -157,5 +152,4 @@ Unit* Dashboard::GenerateId(Cloud* cloud, Unit* newUnit){
 
 	int generatedId = largestId+=1;
 	newUnit->set_Id(generatedId);
-	return newUnit;
 }

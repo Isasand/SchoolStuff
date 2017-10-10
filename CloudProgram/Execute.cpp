@@ -47,6 +47,9 @@ Execute::Execute(std::string argCommand, Cloud* cloud)
 		}
 	}
 
+	if (get_ExecutedCommands() == 0) {
+		std::cout << "Input a valid command";
+	}
 }
 
 Execute::~Execute()
@@ -107,12 +110,22 @@ void Execute::Run(int commandId) {
 	switch (commandId) {
 
 	case 1: {//kommando som är bundet = 'help'
-		ListAllCommands();
-		std::cout << "OK<ENTER>";
+		if (m_argUnitId != "not used") {
+			m_ExecutedCommands--;
+		}
+		else {
+			ListAllCommands();
+			std::cout << "OK<ENTER>";
+		}
 		break;
 	}
 	case 2: { //exit cloud 'exit'
-		Cloud::ExitCloud();
+		if (m_argUnitId != "not used") {
+			m_ExecutedCommands--;
+		}
+		else {
+			Cloud::ExitCloud();
+		}
 		break;
 	}
 
@@ -211,6 +224,7 @@ void Execute::Run(int commandId) {
 	}
 	}
 }
+
 //'help'-kommandot triggar denna
 void Execute::ListAllCommands() {
 	for (int i = 0; i < m_Commands.size(); i++) {

@@ -23,5 +23,4 @@ public:
 protected: 
 	std::vector<Unit*> m_CloudUnits;
 	int m_NumberOfUnits;
-
 };

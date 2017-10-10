@@ -1,7 +1,7 @@
 #include "Unit.h"
 
-Unit::Unit() {
-	m_Status = status::OFF;
+Unit::Unit(){
+
 };
 
 Unit::Unit(std::string name, std::string info, status status, int id) {
