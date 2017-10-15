@@ -10,7 +10,6 @@ int main() {
 	Dashboard *dashboard = new Dashboard();
 	std::string command;
 	while (true) {
-		
 		ClearScreenFunction();
 		cloud->Welcome();
 		dashboard->ShowUnits(cloud);
